@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="edu.uark.csce.parkansas.parkansas.MainActivity">
+    <item android:id="@+id/action_login" android:title="@string/login"
+        android:orderInCategory="1"   android:showAsAction="never"/>
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="2" android:showAsAction="never" />
+    <item android:id="@+id/action_exit" android:title="@string/quit_application"
+        android:orderInCategory="3"   android:showAsAction="never"/>
+</menu>
