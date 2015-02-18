@@ -25,6 +25,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.Menu;
 
+import com.facebook.Session;
+
+
 
 public class MainActivity extends Activity {
 
@@ -75,7 +78,7 @@ public class MainActivity extends Activity {
         Location loc = locationManager.getLastKnownLocation(provider);
 
         updateWithNewLocation(loc);
-        //locationManager.requestLocationUpdates(provider, 2000, 10, locationListener);
+        locationManager.requestLocationUpdates(provider, 2000, 10, locationListener);
 
     }
 
@@ -135,12 +138,11 @@ public class MainActivity extends Activity {
     }
 
     private void updateWithNewLocation(Location loc) {
-        if (loc != null) {
-            double lat = loc.getLatitude();
-            double lng = loc.getLongitude();
+            double lat = 36.068654;
+            double lng = -94.174635;
 
             LatLng location = new LatLng(lat, lng);
-            map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location,
                     16);
             map.animateCamera(update);
@@ -175,4 +177,3 @@ public class MainActivity extends Activity {
             }
         };
     }
-}
