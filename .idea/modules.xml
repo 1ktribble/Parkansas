@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PARKansas.iml" filepath="$PROJECT_DIR$/PARKansas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ParkansasReset.iml" filepath="$PROJECT_DIR$/ParkansasReset.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

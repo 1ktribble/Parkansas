@@ -1,0 +1,41 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    tools:context="edu.uark.csce.parkansas.parkansas.ToolbarLotFragment">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/lotNameText"
+            android:tag=""
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Lot Name"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_weight="3"/>
+        <Button
+            android:id="@+id/showMoreBtn"
+            android:tag="showMore"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Show More"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="#000"
+            android:layout_weight="3"/>
+        <Button
+            android:id="@+id/lotInfoBackBtn"
+            android:tag="back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Back"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="#000"
+            android:layout_weight="3"/>
+    </LinearLayout>
+</FrameLayout>
