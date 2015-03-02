@@ -44,4 +44,18 @@
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="right|bottom"
+        android:id="@+id/container3">
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/kai">
+        </ImageView>
+        </FrameLayout>
 </FrameLayout>

@@ -28,7 +28,7 @@ public class MainActivity extends FragmentActivity implements
     private GoogleMap map;
 
     ArrayList<Lot> lots;
-    ArrayList<Polygon> polygons;//hello
+    ArrayList<Polygon> polygons;    //hello
     BooleansWithTags colorList;
     BooleansWithTags timesList;
     BooleansWithTags otherList;

@@ -14,6 +14,7 @@ public class Lot {
     String other;
     String time;
 
+
     Lot(String nameArg, ArrayList<String> colorArg,
         int fillColorArg, ArrayList<LatLng> verticesArg, String otherArg, String timeArg) {
 
