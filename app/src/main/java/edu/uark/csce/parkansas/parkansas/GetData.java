@@ -15,9 +15,19 @@ import android.os.AsyncTask;
 public class GetData{
     JSONParser jParser = new JSONParser();
 
-    private static String url_get_stuff = "http://192.168.0.2/testing/getdata2.php";
+    private static String url_get_stuff = "http://uaf58657.ddns.uark.edu/data.php";
 
     JSONArray products = null;
+
+    public interface OnTaskCompleted{
+        void onTaskCompleted(JSONArray products);
+    }
+
+    private OnTaskCompleted listener;
+
+    public GetData(OnTaskCompleted listener){
+        this.listener=listener;
+    }
 
     public void happen() {
         new LoadAllProducts().execute();
@@ -43,7 +53,14 @@ public class GetData{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            listener.onTaskCompleted(products);
         }
     }
 }

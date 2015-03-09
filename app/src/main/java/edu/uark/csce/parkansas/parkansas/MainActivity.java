@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,159 +43,59 @@ public class MainActivity extends FragmentActivity implements
     LatLngBounds centerBounds;
     String popDownFragment = "no";  //current fragment in the popDown frame, "no" == empty
     int selectedIndex;              //index of selected Lot
-
+    boolean moving = false;
+    float x,y = 0.0f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         intent = getIntent();
 
-        GetData test = new GetData();
+        GetData test = new GetData(new GetData.OnTaskCompleted() {
+            @Override
+            public void onTaskCompleted(JSONArray products) {
+                taskCompleted(products);
+            }
+        });
         test.happen();
 
-        colorList = new BooleansWithTags();
-        colorList.add("blue", true);
-        colorList.add("red", true);
-        colorList.add("green", true);
-        colorList.add("yellow", true);
-
-        timesList = new BooleansWithTags();
-        timesList.add("idk1", true);
-        timesList.add("idk2", true);
-        timesList.add("idk3", true);
-
-        otherList = new BooleansWithTags();
-        otherList.add("idgaf1", true);
-        otherList.add("idgaf2", true);
-
-        lots = new ArrayList<Lot>();
-
-        ArrayList<String> Colors = new ArrayList<String>();
-        ArrayList<LatLng> LatLangs = new ArrayList<LatLng>();
-
         /*
-        Colors.add("red");
-        LatLangs.add(new LatLng(36.058466, -94.180259));
-        LatLangs.add(new LatLng(36.058397, -94.177619));
-        LatLangs.add(new LatLng(36.057009, -94.177276));
-        LatLangs.add(new LatLng(36.056922, -94.180280));
-        lots.add(new Lot("Lot1", Colors, Color.RED, LatLangs, otherList.tags.get(0), timesList.tags.get(0)));
-        Colors.clear();LatLangs.clear();
+        Fragment fragment = new LegendFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container3, fragment);
+        ft.commit();
 
-        Colors.add("blue");
-        LatLangs.add(new LatLng(36.060513, -94.180183));
-        LatLangs.add(new LatLng(36.060513, -94.179465));
-        LatLangs.add(new LatLng(36.060079, -94.179465));
-        LatLangs.add(new LatLng(36.060079, -94.180183));
-        lots.add(new Lot("Lot2", Colors, Color.BLUE, LatLangs, otherList.tags.get(1), timesList.tags.get(1)));
-        Colors.clear();LatLangs.clear();
 
-        Colors.add("green");
-        LatLangs.add(new LatLng(36.068466, -94.180259));
-        LatLangs.add(new LatLng(36.068397, -94.177619));
-        LatLangs.add( new LatLng(36.067009, -94.177276));
-        LatLangs.add( new LatLng(36.066922, -94.180280));
-        lots.add(new Lot("Lot3", Colors, Color.GREEN, LatLangs, otherList.tags.get(0), timesList.tags.get(2)));
-        Colors.clear();LatLangs.clear();
-        */
+        final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.container3);
+        frameLayout.setX(200);
+        frameLayout.setY(200);
 
-        try{ Thread.sleep(5000); }catch(InterruptedException e){ }
-        //String s;
-        //s = "[{\"id\":3,\"lotId\":49,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.067916 -94.168373,36.068048 -94.16837,36.068044 -94.167627,36.067916 -94.16763,36.067916 -94.168373\",\"status\":1},{\"id\":4,\"lotId\":23,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.056831 -94.180841,36.056871 -94.180841,36.05687 -94.180802,36.057182 -94.180799,36.057182 -94.181011,36.056869 -94.181,36.056865 -94.180973,36.05683 -94.180971,36.056831 -94.180841\",\"status\":1},{\"id\":5,\"lotId\":23,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.057174 -94.181307,36.056853 -94.181307,36.056851 -94.181256,36.057176 -94.181253,36.057174 -94.181307\",\"status\":1},{\"id\":6,\"lotId\":64,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.070514 -94.168291,36.070269 -94.168297,36.070265 -94.168294,36.070262 -94.168102,36.07051 -94.168093,36.070514 -94.168291\",\"status\":1},{\"id\":7,\"lotId\":64,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.070252 -94.168389,36.070593 -94.168373,36.070597 -94.168464,36.070261 -94.168478,36.070252 -94.168389\",\"status\":1}]";
-        try {
-            //JSONObject jsonObject = new JSONObject(s);
-            //Log.i("idk", jsonObject.getString("color"));
-            JSONArray jsonArray;// = new JSONArray(s);
-            jsonArray = test.getProducts();
-            for(int i=0;i<jsonArray.length();i++){
-                JSONObject e = jsonArray.getJSONObject(i);
 
-                Log.i("idk", e.getString("shape"));
-
-                String name = e.getString("lotId");
-                String color = e.getString("color");
-                String shape = e.getString("shape");
-
-                int start = 0;
-                int end = -1;
-
-                while(end != shape.length()){
-                    //Log.i(String.valueOf(j),String.valueOf(shape.indexOf('-', end)));
-                    start = end + 1;
-                    end = shape.indexOf(' ', start);
-                    String lat = shape.substring(start, end);
-                    start = shape.indexOf('-', end);
-                    end = shape.indexOf(',', start);
-                    if(end == -1) end = shape.length();
-                    String lng = shape.substring(start, end);
-
-                    LatLangs.add(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
-                }
-
-                Colors.add("red");
-                lots.add(new Lot(name, Colors, Color.parseColor(color), LatLangs, otherList.tags.get(0), timesList.tags.get(0)));
-                Colors.clear();LatLangs.clear();
-            }
-        } catch (JSONException e){
-            Log.e("error", "there was an error(no shit)");
-        }
-
-        addToolbarHomeFragment();
-
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-//hello
-        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+        frameLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onMapLoaded() {
-                //starting bounds, ne = northeast, sw = southwest
-                LatLng ne = new LatLng(36.070352, -94.168765);
-                LatLng sw = new LatLng(36.056000, -94.183871);
-                centerBounds = new LatLngBounds(sw, ne);
-
-                map.moveCamera(CameraUpdateFactory.newLatLngBounds(centerBounds, 1));
-                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-                polygons = new ArrayList<Polygon>();
-
-                //adds each lot polygon from lots to the map
-                for (int index = 0; index < lots.size(); index++) {
-                    PolygonOptions rectOptions = new PolygonOptions()
-                            //.add(lots.get(index).getVertex(0),
-                            //        lots.get(index).getVertex(1),
-                            //        lots.get(index).getVertex(2),
-                            //        lots.get(index).getVertex(3))
-                            .fillColor(lots.get(index).getFillColor())
-                                    //.strokeWidth(3)
-                            .strokeColor(lots.get(index).getFillColor());
-
-                    for(int j = 0; j < lots.get(index).vertices.size(); j++){
-                        rectOptions.add(lots.get(index).getVertex(j));
-                    }
-
-                    polygons.add(map.addPolygon(rectOptions));
-                }
-            }
-        });
-
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng clickPoint) {
-                for (int index = 0; index < lots.size(); index++) {
-                    if(polygons.get(index).isVisible()
-                            && isPointInPolygon(clickPoint, lots.get(index).getVertices())){
-                        selectedIndex = index;
-                        removePopDownFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("name", lots.get(index).getName());
-                        addToolbarLotFragment(bundle);
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                Log.i("hello", "hello");
+                switch (arg1.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        moving = true;
                         break;
-                    }else if(index + 1 == lots.size()){
-                        removePopDownFragment();
-                        addToolbarHomeFragment();
-                    }
+                    case MotionEvent.ACTION_MOVE:
+                        if (moving) {
+                            x = arg1.getRawX() - frameLayout.getWidth()/2;
+                            y = arg1.getRawY() - frameLayout.getHeight()*3/2;
+                            frameLayout.setX(x);
+                            frameLayout.setY(y);
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        moving = false;
+                        break;
                 }
+                return true;
             }
         });
+*/
+
     }
 
     //returns true if tap point is inside polygon defined by arraylist
@@ -417,5 +320,152 @@ public class MainActivity extends FragmentActivity implements
             //handle Directions
         }
     }
+
+    public void taskCompleted(JSONArray products){
+        colorList = new BooleansWithTags();
+        colorList.add("blue", true);
+        colorList.add("red", true);
+        colorList.add("green", true);
+        colorList.add("yellow", true);
+
+        timesList = new BooleansWithTags();
+        timesList.add("idk1", true);
+        timesList.add("idk2", true);
+        timesList.add("idk3", true);
+
+        otherList = new BooleansWithTags();
+        otherList.add("idgaf1", true);
+        otherList.add("idgaf2", true);
+
+        lots = new ArrayList<Lot>();
+
+        ArrayList<String> Colors = new ArrayList<String>();
+        ArrayList<LatLng> LatLangs = new ArrayList<LatLng>();
+
+        /*
+        Colors.add("red");
+        LatLangs.add(new LatLng(36.058466, -94.180259));
+        LatLangs.add(new LatLng(36.058397, -94.177619));
+        LatLangs.add(new LatLng(36.057009, -94.177276));
+        LatLangs.add(new LatLng(36.056922, -94.180280));
+        lots.add(new Lot("Lot1", Colors, Color.RED, LatLangs, otherList.tags.get(0), timesList.tags.get(0)));
+        Colors.clear();LatLangs.clear();
+
+        Colors.add("blue");
+        LatLangs.add(new LatLng(36.060513, -94.180183));
+        LatLangs.add(new LatLng(36.060513, -94.179465));
+        LatLangs.add(new LatLng(36.060079, -94.179465));
+        LatLangs.add(new LatLng(36.060079, -94.180183));
+        lots.add(new Lot("Lot2", Colors, Color.BLUE, LatLangs, otherList.tags.get(1), timesList.tags.get(1)));
+        Colors.clear();LatLangs.clear();
+
+        Colors.add("green");
+        LatLangs.add(new LatLng(36.068466, -94.180259));
+        LatLangs.add(new LatLng(36.068397, -94.177619));
+        LatLangs.add( new LatLng(36.067009, -94.177276));
+        LatLangs.add( new LatLng(36.066922, -94.180280));
+        lots.add(new Lot("Lot3", Colors, Color.GREEN, LatLangs, otherList.tags.get(0), timesList.tags.get(2)));
+        Colors.clear();LatLangs.clear();
+        */
+
+        try{ Thread.sleep(5000); }catch(InterruptedException e){ }
+        //String s;
+        //s = "[{\"id\":3,\"lotId\":49,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.067916 -94.168373,36.068048 -94.16837,36.068044 -94.167627,36.067916 -94.16763,36.067916 -94.168373\",\"status\":1},{\"id\":4,\"lotId\":23,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.056831 -94.180841,36.056871 -94.180841,36.05687 -94.180802,36.057182 -94.180799,36.057182 -94.181011,36.056869 -94.181,36.056865 -94.180973,36.05683 -94.180971,36.056831 -94.180841\",\"status\":1},{\"id\":5,\"lotId\":23,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.057174 -94.181307,36.056853 -94.181307,36.056851 -94.181256,36.057176 -94.181253,36.057174 -94.181307\",\"status\":1},{\"id\":6,\"lotId\":64,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.070514 -94.168291,36.070269 -94.168297,36.070265 -94.168294,36.070262 -94.168102,36.07051 -94.168093,36.070514 -94.168291\",\"status\":1},{\"id\":7,\"lotId\":64,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.070252 -94.168389,36.070593 -94.168373,36.070597 -94.168464,36.070261 -94.168478,36.070252 -94.168389\",\"status\":1}]";
+        try {
+            //JSONObject jsonObject = new JSONObject(s);
+            //Log.i("idk", jsonObject.getString("color"));
+            JSONArray jsonArray;// = new JSONArray(s);
+            jsonArray = products;
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject e = jsonArray.getJSONObject(i);
+
+                Log.i("idk", e.getString("shape"));
+
+                String name = e.getString("lotId");
+                String color = e.getString("color");
+                String shape = e.getString("shape");
+
+                int start = 0;
+                int end = -1;
+
+                while(end != shape.length()){
+
+                    start = end + 1;
+                    end = shape.indexOf(' ', start);
+                    String lat = shape.substring(start, end);
+                    start = shape.indexOf('-', end);
+                    end = shape.indexOf('|', start);
+                    if(end == -1) end = shape.length();
+                    String lng = shape.substring(start, end);
+
+                    LatLangs.add(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
+                }
+
+                Colors.add("red");
+                lots.add(new Lot(name, Colors, Color.parseColor(color), LatLangs, otherList.tags.get(0), timesList.tags.get(0)));
+                Colors.clear();LatLangs.clear();
+            }
+        } catch (JSONException e){
+            Log.e("error", "there was an error(no shit)");
+        }
+
+        addToolbarHomeFragment();
+
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+
+        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                //starting bounds, ne = northeast, sw = southwest
+                LatLng ne = new LatLng(36.070352, -94.168765);
+                LatLng sw = new LatLng(36.056000, -94.183871);
+                centerBounds = new LatLngBounds(sw, ne);
+
+                map.moveCamera(CameraUpdateFactory.newLatLngBounds(centerBounds, 1));
+                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+                polygons = new ArrayList<Polygon>();
+
+                //adds each lot polygon from lots to the map
+                for (int index = 0; index < lots.size(); index++) {
+                    PolygonOptions rectOptions = new PolygonOptions()
+                            //.add(lots.get(index).getVertex(0),
+                            //        lots.get(index).getVertex(1),
+                            //        lots.get(index).getVertex(2),
+                            //        lots.get(index).getVertex(3))
+                            .fillColor(lots.get(index).getFillColor())
+                                    //.strokeWidth(3)
+                            .strokeColor(lots.get(index).getFillColor());
+
+                    for(int j = 0; j < lots.get(index).vertices.size(); j++){
+                        rectOptions.add(lots.get(index).getVertex(j));
+                    }
+
+                    polygons.add(map.addPolygon(rectOptions));
+                }
+            }
+        });
+
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng clickPoint) {
+                for (int index = 0; index < lots.size(); index++) {
+                    if(polygons.get(index).isVisible()
+                            && isPointInPolygon(clickPoint, lots.get(index).getVertices())){
+                        selectedIndex = index;
+                        removePopDownFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("name", lots.get(index).getName());
+                        addToolbarLotFragment(bundle);
+                        break;
+                    }else if(index + 1 == lots.size()){
+                        removePopDownFragment();
+                        addToolbarHomeFragment();
+                    }
+                }
+            }
+        });
+    }
+
 }
 
