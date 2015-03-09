@@ -140,7 +140,7 @@ public class MainActivity extends FragmentActivity implements
         addToolbarHomeFragment();
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
+//hello
         map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
