@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +15,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -28,7 +33,7 @@ public class MainActivity extends FragmentActivity implements
     private GoogleMap map;
 
     ArrayList<Lot> lots;
-    ArrayList<Polygon> polygons;    //hello
+    ArrayList<Polygon> polygons;
     BooleansWithTags colorList;
     BooleansWithTags timesList;
     BooleansWithTags otherList;
@@ -41,6 +46,9 @@ public class MainActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         intent = getIntent();
+
+        GetData test = new GetData();
+        test.happen();
 
         colorList = new BooleansWithTags();
         colorList.add("blue", true);
@@ -62,6 +70,7 @@ public class MainActivity extends FragmentActivity implements
         ArrayList<String> Colors = new ArrayList<String>();
         ArrayList<LatLng> LatLangs = new ArrayList<LatLng>();
 
+        /*
         Colors.add("red");
         LatLangs.add(new LatLng(36.058466, -94.180259));
         LatLangs.add(new LatLng(36.058397, -94.177619));
@@ -85,6 +94,48 @@ public class MainActivity extends FragmentActivity implements
         LatLangs.add( new LatLng(36.066922, -94.180280));
         lots.add(new Lot("Lot3", Colors, Color.GREEN, LatLangs, otherList.tags.get(0), timesList.tags.get(2)));
         Colors.clear();LatLangs.clear();
+        */
+
+        try{ Thread.sleep(5000); }catch(InterruptedException e){ }
+        //String s;
+        //s = "[{\"id\":3,\"lotId\":49,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.067916 -94.168373,36.068048 -94.16837,36.068044 -94.167627,36.067916 -94.16763,36.067916 -94.168373\",\"status\":1},{\"id\":4,\"lotId\":23,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.056831 -94.180841,36.056871 -94.180841,36.05687 -94.180802,36.057182 -94.180799,36.057182 -94.181011,36.056869 -94.181,36.056865 -94.180973,36.05683 -94.180971,36.056831 -94.180841\",\"status\":1},{\"id\":5,\"lotId\":23,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.057174 -94.181307,36.056853 -94.181307,36.056851 -94.181256,36.057176 -94.181253,36.057174 -94.181307\",\"status\":1},{\"id\":6,\"lotId\":64,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.070514 -94.168291,36.070269 -94.168297,36.070265 -94.168294,36.070262 -94.168102,36.07051 -94.168093,36.070514 -94.168291\",\"status\":1},{\"id\":7,\"lotId\":64,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.070252 -94.168389,36.070593 -94.168373,36.070597 -94.168464,36.070261 -94.168478,36.070252 -94.168389\",\"status\":1}]";
+        try {
+            //JSONObject jsonObject = new JSONObject(s);
+            //Log.i("idk", jsonObject.getString("color"));
+            JSONArray jsonArray;// = new JSONArray(s);
+            jsonArray = test.getProducts();
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject e = jsonArray.getJSONObject(i);
+
+                Log.i("idk", e.getString("shape"));
+
+                String name = e.getString("lotId");
+                String color = e.getString("color");
+                String shape = e.getString("shape");
+
+                int start = 0;
+                int end = -1;
+
+                while(end != shape.length()){
+                    //Log.i(String.valueOf(j),String.valueOf(shape.indexOf('-', end)));
+                    start = end + 1;
+                    end = shape.indexOf(' ', start);
+                    String lat = shape.substring(start, end);
+                    start = shape.indexOf('-', end);
+                    end = shape.indexOf(',', start);
+                    if(end == -1) end = shape.length();
+                    String lng = shape.substring(start, end);
+
+                    LatLangs.add(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
+                }
+
+                Colors.add("red");
+                lots.add(new Lot(name, Colors, Color.parseColor(color), LatLangs, otherList.tags.get(0), timesList.tags.get(0)));
+                Colors.clear();LatLangs.clear();
+            }
+        } catch (JSONException e){
+            Log.e("error", "there was an error(no shit)");
+        }
 
         addToolbarHomeFragment();
 
@@ -106,13 +157,17 @@ public class MainActivity extends FragmentActivity implements
                 //adds each lot polygon from lots to the map
                 for (int index = 0; index < lots.size(); index++) {
                     PolygonOptions rectOptions = new PolygonOptions()
-                            .add(lots.get(index).getVertex(0),
-                                    lots.get(index).getVertex(1),
-                                    lots.get(index).getVertex(2),
-                                    lots.get(index).getVertex(3))
+                            //.add(lots.get(index).getVertex(0),
+                            //        lots.get(index).getVertex(1),
+                            //        lots.get(index).getVertex(2),
+                            //        lots.get(index).getVertex(3))
                             .fillColor(lots.get(index).getFillColor())
                                     //.strokeWidth(3)
                             .strokeColor(lots.get(index).getFillColor());
+
+                    for(int j = 0; j < lots.get(index).vertices.size(); j++){
+                        rectOptions.add(lots.get(index).getVertex(j));
+                    }
 
                     polygons.add(map.addPolygon(rectOptions));
                 }
