@@ -20,7 +20,6 @@
         <MultiSelectListPreference
             android:key="prefUserPass"
             android:title="Which pass(es) do you have?"
-            android:summary="Select all that apply"
             android:entries = "@array/user_pass"
             android:entryValues = "@array/user_pass_values"
             />
