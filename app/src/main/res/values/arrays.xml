@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="empty_array"></string-array>
+
+    <string-array name="user_type">
+        <item>Student</item>
+        <item>Faculty</item>
+        <item>Visitor</item>
+        <item>Gameday Visitor</item>
+    </string-array>
+
+    <string-array name="user_type_values">
+        <item>Student</item>
+        <item>Faculty</item>
+        <item>Visitor</item>
+        <item>Gameday Visitor</item>
+    </string-array>
+
+    <string-array name="user_pass">
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Harmon Pass</item>
+        <item>Handicap Parking</item>
+    </string-array>
+
+    <string-array name="user_pass_values">
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Harmon Pass</item>
+        <item>Handicap Parking</item>
+    </string-array>
+
+    <string-array name="user_bus">
+        <item>Red</item>
+        <item>Red Reduced</item>
+        <item>Blue</item>
+        <item>Blue Reduced</item>
+        <item>Tan</item>
+        <item>Tan Reduced</item>
+        <item>Green</item>
+        <item>Green Reduced</item>
+        <item>Orange</item>
+        <item>Route 56</item>
+        <item>Brown</item>
+        <item>Brown Reduced</item>
+        <item>Gray</item>
+        <item>Purple</item>
+        <item>Purple Reduced</item>
+    </string-array>
+
+    <string-array name="user_bus_values">
+        <item>Red</item>
+        <item>Red Reduced</item>
+        <item>Blue</item>
+        <item>Blue Reduced</item>
+        <item>Tan</item>
+        <item>Tan Reduced</item>
+        <item>Green</item>
+        <item>Green Reduced</item>
+        <item>Orange</item>
+        <item>Route 56</item>
+        <item>Brown</item>
+        <item>Brown Reduced</item>
+        <item>Gray</item>
+        <item>Purple</item>
+        <item>Purple Reduced</item>
+    </string-array>
+</resources>

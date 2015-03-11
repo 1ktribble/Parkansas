@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory>
+
+        <ListPreference
+            android:key="prefUserType"
+            android:title="Classification"
+            android:summary="Select One"
+            android:entries="@array/user_type"
+            android:entryValues="@array/user_type_values"
+            />
+
+        <SwitchPreference
+            android:key="prefKeySwitch"
+            android:title="Key"
+            android:summaryOn="Hide Key"
+            android:summaryOff="Show Key"
+        />
+
+        <MultiSelectListPreference
+            android:key="prefUserPass"
+            android:title="Which pass(es) do you have?"
+            android:summary="Select all that apply"
+            android:entries = "@array/user_pass"
+            android:entryValues = "@array/user_pass_values"
+            />
+
+    </PreferenceCategory>
+</PreferenceScreen>

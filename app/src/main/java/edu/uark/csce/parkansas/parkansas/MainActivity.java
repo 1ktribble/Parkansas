@@ -7,9 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.FrameLayout;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -96,6 +96,36 @@ public class MainActivity extends FragmentActivity implements
         });
 */
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                openSettings();
+                return true;
+            case R.id.action_exit:
+                finish();
+                return true;
+        }
+        return false;
+
+    }
+
+    public void openSettings(){
+        @SuppressWarnings("rawtypes")
+        Class c = SettingsActivity.class;
+        Intent i = new Intent(this, c);
+
+        startActivity(i);
     }
 
     //returns true if tap point is inside polygon defined by arraylist
