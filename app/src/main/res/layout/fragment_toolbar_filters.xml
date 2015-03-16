@@ -29,16 +29,6 @@
             android:background="@color/black"
             android:layout_weight="1"/>
         <Button
-            android:id="@+id/otherBtn"
-            android:tag="other"
-            android:text="Other"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:background="@color/black"
-            android:layout_weight="1"/>
-        <Button
             android:id="@+id/backBtn"
             android:tag="back"
             android:text="Back"

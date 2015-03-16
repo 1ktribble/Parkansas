@@ -60,8 +60,8 @@ public class ToolbarFiltersFragment  extends Fragment {
         Button btn2 = (Button) getView().findViewById(R.id.timesBtn);
         btn2.setOnClickListener(onClickListener);
 
-        Button btn3 = (Button) getView().findViewById(R.id.otherBtn);
-        btn3.setOnClickListener(onClickListener);
+        //Button btn3 = (Button) getView().findViewById(R.id.otherBtn);
+        //btn3.setOnClickListener(onClickListener);
 
         Button btn4 = (Button) getView().findViewById(R.id.backBtn);
         btn4.setOnClickListener(onClickListener);

@@ -8,27 +8,24 @@ public class Lot {
 
     long id;
     String name;
-    int fillColor;
     ArrayList<LatLng> vertices;
-    ArrayList<String> passColors;
-    String other;
+    int fillColor;
+    String color;
     String time;
+    String other;
 
 
-    Lot(String nameArg, ArrayList<String> colorArg,
-        int fillColorArg, ArrayList<LatLng> verticesArg, String otherArg, String timeArg) {
+    Lot(String nameArg, ArrayList<LatLng> verticesArg, int fillColorArg, String colorArg,
+         String timeArg, String otherArg) {
 
         name = nameArg;
-        passColors = new ArrayList<String>();
-        for(int i = 0; i < colorArg.size(); i++) {
-            passColors.add(colorArg.get(i));
-        }
+        color = colorArg;
+        other = otherArg;
         fillColor = fillColorArg;
-        vertices = new ArrayList<LatLng>();
+        vertices = new ArrayList<>();
         for(int i = 0; i < verticesArg.size(); i++) {
             vertices.add(verticesArg.get(i));
         }
-        other = otherArg;
         time = timeArg;
     }
 
@@ -45,17 +42,14 @@ public class Lot {
         return vertices;
     }
     public LatLng getVertex(int index){return vertices.get(index);}
-    public ArrayList<String> getPassColors() {
-        return passColors;
-    }
-    public String getOther(){
-        return other;
+    public String getColor() {
+        return color;
     }
     public String getTime(){
         return time;
     }
-    public boolean hasColor(String color){
-        return passColors.contains(color);
+    public String getOther(){
+        return other;
     }
     public LatLng getCenter(){
         double centerLong = 0;

@@ -56,7 +56,7 @@ public class ToolbarFilterOptionsFragment extends Fragment {
         int size = list.size();
 
 
-        for(int j = 0; j < size; j+=3){
+        for(int j = 0; j < size; j+=2){
             LinearLayout linearLayout1 = new LinearLayout(getActivity());
             linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -66,7 +66,7 @@ public class ToolbarFilterOptionsFragment extends Fragment {
             params.weight = 3.0f;
             linearLayout1.setLayoutParams(params);
 
-            for (int i = j; i < j + 3; i++) {
+            for (int i = j; i < j + 2; i++) {
                 if( i >= size) break;
                 final Button btn = new Button(getActivity());
                 btn.setLayoutParams(params);

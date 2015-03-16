@@ -17,10 +17,11 @@ public class GetData{
 
     private static String url_get_stuff = "http://uaf58657.ddns.uark.edu/data.php";
 
-    JSONArray products = null;
+    //JSONArray products = null;
+    JSONObject products = null;
 
     public interface OnTaskCompleted{
-        void onTaskCompleted(JSONArray products);
+        void onTaskCompleted(JSONObject products);
     }
 
     private OnTaskCompleted listener;
@@ -33,7 +34,7 @@ public class GetData{
         new LoadAllProducts().execute();
     }
 
-    public JSONArray getProducts(){
+    public JSONObject getProducts(){
         return products;
     }
 
@@ -48,7 +49,8 @@ public class GetData{
             try {
                 int success = json.getInt("success");
                 if (success == 1) {
-                    products = json.getJSONArray("lots");
+                    //products = json.getJSONArray("lots");
+                    products = json;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -53,7 +53,7 @@ public class MainActivity extends FragmentActivity implements
 
         GetData test = new GetData(new GetData.OnTaskCompleted() {
             @Override
-            public void onTaskCompleted(JSONArray products) {
+            public void onTaskCompleted(JSONObject products) {
                 taskCompleted(products);
             }
         });
@@ -221,12 +221,6 @@ public class MainActivity extends FragmentActivity implements
             bundle.putBooleanArray("booleans", timesList.getPrimitive());
             addToolbarFilterOptionsFragment(bundle);
             popDownFragment = tag;
-        }else if(tag.equals("other")){
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("list", otherList.tags);
-            bundle.putBooleanArray("booleans", otherList.getPrimitive());
-            addToolbarFilterOptionsFragment(bundle);
-            popDownFragment = tag;
         }else if(tag.equals("back")){
             removePopDownFragment();
             addToolbarHomeFragment();
@@ -237,10 +231,12 @@ public class MainActivity extends FragmentActivity implements
     public void onToolbarFilterOptionsFragmentClicked(String tag) {
         if(popDownFragment.equals("color")) {
             int index = colorList.getIndexOf(tag);
+            Log.i("index", String.valueOf(index));
+            Log.i("tag", tag);
             colorList.flip(index);
             if(colorList.booleans.get(index)) {
                 for (int i = 0; i < lots.size(); i++) {
-                    if (lots.get(i).getPassColors().get(0).equals(tag)
+                    if (lots.get(i).getColor().equals(tag)
                             && timesList.isTrue(lots.get(i).getTime())
                             && otherList.isTrue(lots.get(i).getOther())) {
 
@@ -249,7 +245,7 @@ public class MainActivity extends FragmentActivity implements
                 }
             }else{
                 for (int i = 0; i < lots.size(); i++) {
-                    if (lots.get(i).getPassColors().get(0).equals(tag)) {
+                    if (lots.get(i).getColor().equals(tag)) {
                         polygons.get(i).setVisible(false);
                     }
                 }
@@ -261,7 +257,7 @@ public class MainActivity extends FragmentActivity implements
                 for (int i = 0; i < lots.size(); i++) {
                     if (lots.get(i).getTime().equals(tag)
                             && otherList.isTrue(lots.get(i).getOther())
-                            && colorList.isTrue(lots.get(i).getPassColors().get(0))) {
+                            && colorList.isTrue(lots.get(i).getColor())) {
 
                         polygons.get(i).setVisible(true);
                     }
@@ -269,25 +265,6 @@ public class MainActivity extends FragmentActivity implements
             }else{
                 for (int i = 0; i < lots.size(); i++) {
                     if (lots.get(i).getTime().equals(tag)) {
-                        polygons.get(i).setVisible(false);
-                    }
-                }
-            }
-        }else if(popDownFragment.equals("other")) {
-            int index = otherList.getIndexOf(tag);
-            otherList.flip(index);
-            if(otherList.booleans.get(index)) {
-                for (int i = 0; i < lots.size(); i++) {
-                    if (lots.get(i).getOther().equals(tag)
-                            && timesList.isTrue(lots.get(i).getTime())
-                            && colorList.isTrue(lots.get(i).getPassColors().get(0))) {
-
-                        polygons.get(i).setVisible(true);
-                    }
-                }
-            }else{
-                for (int i = 0; i < lots.size(); i++) {
-                    if (lots.get(i).getOther().equals(tag)) {
                         polygons.get(i).setVisible(false);
                     }
                 }
@@ -304,7 +281,7 @@ public class MainActivity extends FragmentActivity implements
             if(popDownFragment.equals("no")) {
                 popDownFragment = tag;
                 Bundle bundle = new Bundle();
-                bundle.putString("color", lots.get(selectedIndex).getPassColors().get(0));
+                bundle.putString("color", lots.get(selectedIndex).getColor());
                 bundle.putString("other", lots.get(selectedIndex).getOther());
                 bundle.putString("times", lots.get(selectedIndex).getTime());
                 addToolbarLotExtraFragment(bundle);
@@ -321,69 +298,45 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
-    public void taskCompleted(JSONArray products){
+    public void taskCompleted(JSONObject products){
         colorList = new BooleansWithTags();
-        colorList.add("blue", true);
-        colorList.add("red", true);
-        colorList.add("green", true);
-        colorList.add("yellow", true);
+        colorList.add("Reserved", true);
+        colorList.add("Faculty/Staff", true);
+        colorList.add("Resident Reserved", true);
+        colorList.add("Student", true);
+        colorList.add("Remote", true);
+        colorList.add("Parking Meters", true);
+        colorList.add("Short Term Meters", true);
+        colorList.add("ADA Parking", true);
 
         timesList = new BooleansWithTags();
-        timesList.add("idk1", true);
-        timesList.add("idk2", true);
-        timesList.add("idk3", true);
 
         otherList = new BooleansWithTags();
-        otherList.add("idgaf1", true);
-        otherList.add("idgaf2", true);
+        otherList.add("placeholder", true);
 
         lots = new ArrayList<Lot>();
 
-        ArrayList<String> Colors = new ArrayList<String>();
         ArrayList<LatLng> LatLangs = new ArrayList<LatLng>();
 
-        /*
-        Colors.add("red");
-        LatLangs.add(new LatLng(36.058466, -94.180259));
-        LatLangs.add(new LatLng(36.058397, -94.177619));
-        LatLangs.add(new LatLng(36.057009, -94.177276));
-        LatLangs.add(new LatLng(36.056922, -94.180280));
-        lots.add(new Lot("Lot1", Colors, Color.RED, LatLangs, otherList.tags.get(0), timesList.tags.get(0)));
-        Colors.clear();LatLangs.clear();
-
-        Colors.add("blue");
-        LatLangs.add(new LatLng(36.060513, -94.180183));
-        LatLangs.add(new LatLng(36.060513, -94.179465));
-        LatLangs.add(new LatLng(36.060079, -94.179465));
-        LatLangs.add(new LatLng(36.060079, -94.180183));
-        lots.add(new Lot("Lot2", Colors, Color.BLUE, LatLangs, otherList.tags.get(1), timesList.tags.get(1)));
-        Colors.clear();LatLangs.clear();
-
-        Colors.add("green");
-        LatLangs.add(new LatLng(36.068466, -94.180259));
-        LatLangs.add(new LatLng(36.068397, -94.177619));
-        LatLangs.add( new LatLng(36.067009, -94.177276));
-        LatLangs.add( new LatLng(36.066922, -94.180280));
-        lots.add(new Lot("Lot3", Colors, Color.GREEN, LatLangs, otherList.tags.get(0), timesList.tags.get(2)));
-        Colors.clear();LatLangs.clear();
-        */
-
-        try{ Thread.sleep(5000); }catch(InterruptedException e){ }
-        //String s;
-        //s = "[{\"id\":3,\"lotId\":49,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.067916 -94.168373,36.068048 -94.16837,36.068044 -94.167627,36.067916 -94.16763,36.067916 -94.168373\",\"status\":1},{\"id\":4,\"lotId\":23,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.056831 -94.180841,36.056871 -94.180841,36.05687 -94.180802,36.057182 -94.180799,36.057182 -94.181011,36.056869 -94.181,36.056865 -94.180973,36.05683 -94.180971,36.056831 -94.180841\",\"status\":1},{\"id\":5,\"lotId\":23,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.057174 -94.181307,36.056853 -94.181307,36.056851 -94.181256,36.057176 -94.181253,36.057174 -94.181307\",\"status\":1},{\"id\":6,\"lotId\":64,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.070514 -94.168291,36.070269 -94.168297,36.070265 -94.168294,36.070262 -94.168102,36.07051 -94.168093,36.070514 -94.168291\",\"status\":1},{\"id\":7,\"lotId\":64,\"zoneType\":2,\"color\":\"#FFFF00\",\"shape\":\"36.070252 -94.168389,36.070593 -94.168373,36.070597 -94.168464,36.070261 -94.168478,36.070252 -94.168389\",\"status\":1}]";
         try {
-            //JSONObject jsonObject = new JSONObject(s);
-            //Log.i("idk", jsonObject.getString("color"));
-            JSONArray jsonArray;// = new JSONArray(s);
-            jsonArray = products;
+            JSONArray jsonArray;
+            jsonArray = products.getJSONArray("lots");
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject e = jsonArray.getJSONObject(i);
-
-                Log.i("idk", e.getString("shape"));
 
                 String name = e.getString("lotId");
                 String color = e.getString("color");
                 String shape = e.getString("shape");
+                String type = e.getString("zoneType");
+                String time = e.getString("time");
+                if(type.equals("1")) type = colorList.tags.get(0);
+                else if(type.equals("2")) type = colorList.tags.get(1);
+                else if(type.equals("3")) type = colorList.tags.get(2);
+                else if(type.equals("4")) type = colorList.tags.get(3);
+                else if(type.equals("5")) type = colorList.tags.get(4);
+                else if(type.equals("6")) type = colorList.tags.get(5);
+                else if(type.equals("7")) type = colorList.tags.get(6);
+                else if(type.equals("9")) type = colorList.tags.get(7);
 
                 int start = 0;
                 int end = -1;
@@ -401,10 +354,16 @@ public class MainActivity extends FragmentActivity implements
                     LatLangs.add(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
                 }
 
-                Colors.add("red");
-                lots.add(new Lot(name, Colors, Color.parseColor(color), LatLangs, otherList.tags.get(0), timesList.tags.get(0)));
-                Colors.clear();LatLangs.clear();
+                lots.add(new Lot(name, LatLangs, Color.parseColor(color), type, time, otherList.tags.get(0)));
+                LatLangs.clear();
             }
+            jsonArray = products.getJSONArray("timeList");
+            for(int i=0;i<jsonArray.length();i++) {
+                JSONObject e = jsonArray.getJSONObject(i);
+                String time = e.getString("time");
+                timesList.add(time, true);
+            }
+
         } catch (JSONException e){
             Log.e("error", "there was an error(no shit)");
         }
@@ -429,12 +388,8 @@ public class MainActivity extends FragmentActivity implements
                 //adds each lot polygon from lots to the map
                 for (int index = 0; index < lots.size(); index++) {
                     PolygonOptions rectOptions = new PolygonOptions()
-                            //.add(lots.get(index).getVertex(0),
-                            //        lots.get(index).getVertex(1),
-                            //        lots.get(index).getVertex(2),
-                            //        lots.get(index).getVertex(3))
                             .fillColor(lots.get(index).getFillColor())
-                                    //.strokeWidth(3)
+                            //.strokeWidth(3)
                             .strokeColor(lots.get(index).getFillColor());
 
                     for(int j = 0; j < lots.get(index).vertices.size(); j++){
