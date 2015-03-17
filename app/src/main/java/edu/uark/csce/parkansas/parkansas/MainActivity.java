@@ -22,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -53,6 +54,7 @@ public class MainActivity extends FragmentActivity implements
     String streetAddress;
 
     ArrayList<Lot> lots;
+    ArrayList<Marker> garages;
     ArrayList<Polygon> polygons;
     BooleansWithTags colorList;
     BooleansWithTags timesList;
@@ -62,6 +64,9 @@ public class MainActivity extends FragmentActivity implements
     int selectedIndex;              //index of selected Lot
     boolean moving = false;
     float x,y = 0.0f;
+    ArrayList<LatLng> poss = new ArrayList<>();
+    ArrayList<String> ids = new ArrayList<>();
+    ArrayList<String> names = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -346,6 +351,7 @@ public class MainActivity extends FragmentActivity implements
         otherList.add("placeholder", true);
 
         lots = new ArrayList<Lot>();
+        garages = new ArrayList<>();
 
         ArrayList<LatLng> LatLangs = new ArrayList<LatLng>();
 
@@ -395,6 +401,15 @@ public class MainActivity extends FragmentActivity implements
                 timesList.add(time, true);
             }
 
+            jsonArray = products.getJSONArray("garages");
+            for(int i=0;i<jsonArray.length();i++) {
+                JSONObject e = jsonArray.getJSONObject(i);
+                poss.add(new LatLng(Double.parseDouble(e.getString("lat")), Double.parseDouble(e.getString("lng"))));
+                names.add(e.getString("name"));
+                ids.add(e.getString("id"));
+
+            }
+
         } catch (JSONException e){
             Log.e("error", "there was an error(no shit)");
         }
@@ -420,16 +435,22 @@ public class MainActivity extends FragmentActivity implements
                 for (int index = 0; index < lots.size(); index++) {
                     PolygonOptions rectOptions = new PolygonOptions()
                             .fillColor(lots.get(index).getFillColor())
-                            //.strokeWidth(3)
+                                    //.strokeWidth(3)
                             .strokeColor(lots.get(index).getFillColor());
 
-                    for(int j = 0; j < lots.get(index).vertices.size(); j++){
+                    for (int j = 0; j < lots.get(index).vertices.size(); j++) {
                         rectOptions.add(lots.get(index).getVertex(j));
                     }
 
                     polygons.add(map.addPolygon(rectOptions));
                 }
-            }
+                    for (int index = 0; index < poss.size(); index++) {
+                        garages.add(map.addMarker(new MarkerOptions()
+                                .position(poss.get(index))
+                                .title(names.get(index))));
+                    }
+                }
+
         });
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
