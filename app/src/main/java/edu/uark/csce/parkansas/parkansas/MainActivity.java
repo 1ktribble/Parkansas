@@ -1,21 +1,28 @@
 package edu.uark.csce.parkansas.parkansas;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.FrameLayout;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -23,7 +30,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+
 
 public class MainActivity extends FragmentActivity implements
         ToolbarHomeFragment.OnToolbarHomeFragmentClickedListener,
@@ -32,8 +44,13 @@ public class MainActivity extends FragmentActivity implements
         ToolbarLotFragment.OnToolbarLotFragmentClickedListener,
         ToolbarLotExtraFragment.OnToolbarLotExtraFragmentClickedListener{
 
+    //  Location Services
     Intent intent;
+    LocationManager lm;
+    Criteria criteria;
     private GoogleMap map;
+    double latA, lngA;
+    String streetAddress;
 
     ArrayList<Lot> lots;
     ArrayList<Polygon> polygons;
@@ -97,6 +114,14 @@ public class MainActivity extends FragmentActivity implements
 */
 
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        Log.i(ActivityUtils.APPTAG, "[Main Activity] onResume");
+//        //skipLogin = sharedPreferences.getBoolean(ActivityUtils.SKIP_LOGIN, false);
+//        getLocation();
+//    }
 
     //returns true if tap point is inside polygon defined by arraylist
     private boolean isPointInPolygon(LatLng touchPoint, ArrayList<LatLng> vertices) {
@@ -295,6 +320,12 @@ public class MainActivity extends FragmentActivity implements
     public void onToolbarLotExtraFragmentClicked(String tag) {
         if(tag.equals("directions")){
             //handle Directions
+            LatLng centerPoint = lots.get(selectedIndex).getCenter();
+            Intent mapIntent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?saddr="
+                            + latA + "," + lngA + "&daddr="
+                            + centerPoint.latitude + "," + centerPoint.longitude));
+            startActivity(mapIntent);
         }
     }
 
@@ -420,7 +451,91 @@ public class MainActivity extends FragmentActivity implements
                 }
             }
         });
+
+        setCriteria();
+        getLocation();
     }
+
+    private void getLocation() {
+        lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        String provider = lm.getBestProvider(criteria, true);
+
+        Location l = lm.getLastKnownLocation(provider);
+        updateWithNewLocation(l);
+        lm.requestLocationUpdates(provider, 2000, 10, locationListener);
+    }
+
+    private final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            updateWithNewLocation(location);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    private void updateWithNewLocation(Location loc) {
+        if(loc != null) {
+            latA = loc.getLatitude();
+            lngA = loc.getLongitude();
+            showLocation(latA, lngA);
+        }
+    }
+
+    private void showLocation(double latA, double lngA) {
+        LatLng location = new LatLng(latA, lngA);
+        Geocoder geocoder;
+        geocoder = new Geocoder(this, Locale.ENGLISH);
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latA, lngA, 1);
+
+            if(addresses != null) {
+                Address returnedAddress = addresses.get(0);
+//                StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
+                StringBuilder strReturnedAddress = new StringBuilder();
+                for(int i=0; i<returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                streetAddress = (strReturnedAddress.toString());
+            }
+            else{
+                streetAddress = ("No Address returned!");
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            streetAddress = ("Cannot get Address!");
+        }
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 16);
+        map.animateCamera(update);
+//        map.addMarker(new MarkerOptions().position(location).title(streetAddress));
+        map.addMarker(new MarkerOptions().position(location).title(streetAddress));
+    }
+
+    public void setCriteria() {
+        criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setSpeedRequired(false);
+        criteria.setCostAllowed(true);
+    }
+
 
 }
 

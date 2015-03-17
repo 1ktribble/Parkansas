@@ -7,7 +7,7 @@ import android.text.format.Time;
  * Created by Kai Tribble on 12/5/2014.
  */
 public class ActivityUtils {
-    public static final String APPTAG = "edu.uark.csce.RazorRunner";
+    public static final String APPTAG = "Capstone: Parkansas";
 
     public static final String SKIP_LOGIN = "skipLogin";
     public static final String LOGIN_SUCCESS = "successLogin";
