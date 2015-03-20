@@ -19,6 +19,12 @@
             android:summaryOff="Show Key"
             />
 
+        <SwitchPreference
+            android:key="prefGameDayNotificationSwitch"
+            android:title="Notifications"
+            android:summaryOn="Stop sending me notifications"
+            android:summaryOff="Send me notifications"
+            />
 
         <MultiSelectListPreference
             android:key="prefUserPass"
