@@ -1,0 +1,50 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    tools:context="edu.uark.csce.parkansas.parkansas.ToolbarLotExtraFragment">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/lotColorText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Lot Color"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="#000"
+            android:layout_weight="3"/>
+        <TextView
+            android:id="@+id/lotOtherText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Lot Other"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="#000"
+            android:layout_weight="3"/>
+        <TextView
+            android:id="@+id/lotTimesText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Lot Times"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="#000"
+            android:layout_weight="3"/>
+        <Button
+            android:id="@+id/directionsBtn"
+            android:tag="directions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Directions"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="#000"
+            android:layout_weight="3"/>
+    </LinearLayout>
+</FrameLayout>

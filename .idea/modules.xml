@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PARKansas.iml" filepath="$PROJECT_DIR$/PARKansas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Parkansas-connect-locserv.iml" filepath="$PROJECT_DIR$/Parkansas-connect-locserv.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Parkansas1.iml" filepath="$PROJECT_DIR$/Parkansas1.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
