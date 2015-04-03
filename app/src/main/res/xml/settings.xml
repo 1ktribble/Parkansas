@@ -20,10 +20,18 @@
             />
 
         <SwitchPreference
-            android:key="prefGameDayNotificationSwitch"
+            android:key="prefNotificationSwitch"
             android:title="Notifications"
-            android:summaryOn="Stop sending me notifications"
-            android:summaryOff="Send me notifications"
+            android:summaryOn="Notifications Enabled"
+            android:summaryOff="Notifications Disabled"
+            />
+
+        <MultiSelectListPreference
+            android:key="prefNotificationType"
+            android:dependency="prefNotificationSwitch"
+            android:title="Select notifications"
+            android:entries = "@array/user_notification_type"
+            android:entryValues="@array/user_notification_type_values"
             />
 
         <MultiSelectListPreference

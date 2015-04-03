@@ -6,10 +6,12 @@
         android:name="edu.uark.csce.parkansas.parkansas.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="edu.uark.csce.parkansas.parkansas.permission.MAPS_RECEIVE" />
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+
+    <uses-permission android:name="edu.uark.csce.parkansas.parkansas.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -22,11 +24,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.uark.csce.parkansas.parkansas.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +39,6 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBZ5oTgEF3jmMtXKL0nUUxURnmUA2BMGvg" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -46,7 +47,38 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help" >
+        </activity>
 
+        <service
+            android:name=".ParkansasNotificationService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <receiver
+            android:name=".CancelAlarmReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <provider
+            android:name=".ParkansasContentProvider"
+            android:authorities="edu.uark.csce.parkansas.parkansas.parkansasprovider"
+            android:enabled="true"
+            android:exported="true" >
+        </provider>
+
+        <activity
+            android:name=".ResultActivity"
+            android:label="@string/title_activity_result" >
+        </activity>
+        <activity
+            android:name=".AlertInfoActivity"
+            android:label="@string/title_activity_alert_info" >
+        </activity>
     </application>
 
 </manifest>

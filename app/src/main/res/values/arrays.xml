@@ -4,38 +4,56 @@
     <string-array name="empty_array"></string-array>
 
     <string-array name="user_type">
-        <item>Student</item>
-        <item>Faculty</item>
-        <item>Visitor</item>
-        <item>Gameday Visitor</item>
+        <item>@string/student_text</item>
+        <item>@string/faculty_text</item>
+        <item>@string/visitor_text</item>
+        <item>@string/gameday_visitor_text</item>
     </string-array>
 
 
     <string-array name="user_type_values">
-        <item>Student</item>
-        <item>Faculty</item>
-        <item>Visitor</item>
-        <item>Gameday Visitor</item>
+        <item>@string/student_text</item>
+        <item>@string/faculty_text</item>
+        <item>@string/visitor_text</item>
+        <item>@string/gameday_visitor_text</item>
     </string-array>
 
 
     <string-array name="user_pass">
-        <item>Red</item>
-        <item>Blue</item>
-        <item>Green</item>
-        <item>Yellow</item>
-        <item>Harmon Pass</item>
-        <item>Handicap Parking</item>
+        <item>@string/resident_reserved_text</item>
+        <item>@string/reserved_blue_text</item>
+        <item>@string/reserved_green_text</item>
+        <item>@string/reserved_faculty_text</item>
+        <item>@string/harmon_pass_text</item>
+        <item>@string/handicap_parking_text</item>
+        <item>@string/remote_pass_text</item>
     </string-array>
 
 
     <string-array name="user_pass_values">
-        <item>Red</item>
-        <item>Blue</item>
-        <item>Green</item>
-        <item>Yellow</item>
-        <item>Harmon Pass</item>
-        <item>Handicap Parking</item>
+        <item>@string/resident_reserved_text</item>
+        <item>@string/reserved_blue_text</item>
+        <item>@string/reserved_green_text</item>
+        <item>@string/reserved_faculty_text</item>
+        <item>@string/harmon_pass_text</item>
+        <item>@string/handicap_parking_text</item>
+        <item>@string/remote_pass_text</item>
+    </string-array>
+
+    <string-array name="user_notification_type">
+        <item>@string/pre_game_day</item>
+        <item>@string/free_parking</item>
+        <item>@string/wake_up_call</item>
+        <item>@string/time_expiration</item>
+        <item>@string/harmon_notification</item>
+    </string-array>
+
+    <string-array name="user_notification_type_values">
+        <item>@string/pre_game_day</item>
+        <item>@string/free_parking</item>
+        <item>@string/wake_up_call</item>
+        <item>@string/time_expiration</item>
+        <item>@string/harmon_notification</item>
     </string-array>
 
 
@@ -74,5 +92,27 @@
         <item>Gray</item>
         <item>Purple</item>
         <item>Purple Reduced</item>
+    </string-array>
+
+    <string-array name="days_of_week">
+        <item>Alert Me Today</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="days_of_week_values">
+        <item>Alert Me Today</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
     </string-array>
 </resources>

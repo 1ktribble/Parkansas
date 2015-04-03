@@ -18,15 +18,7 @@
             android:textColor="@color/white"
             android:background="#000"
             android:layout_weight="3"/>
-        <TextView
-            android:id="@+id/lotOtherText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Lot Other"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:background="#000"
-            android:layout_weight="3"/>
+
         <TextView
             android:id="@+id/lotTimesText"
             android:layout_width="match_parent"

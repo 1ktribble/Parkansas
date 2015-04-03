@@ -1,7 +1,9 @@
 package edu.uark.csce.parkansas.parkansas;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
@@ -9,8 +11,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TimePicker;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,8 +45,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-
-
 public class MainActivity extends FragmentActivity implements
         ToolbarHomeFragment.OnToolbarHomeFragmentClickedListener,
         ToolbarFiltersFragment.OnToolbarFiltersFragmentClickedListener,
@@ -49,20 +53,23 @@ public class MainActivity extends FragmentActivity implements
         ToolbarLotExtraFragment.OnToolbarLotExtraFragmentClickedListener{
 
     //  Location Services
-    Intent intent;
     LocationManager lm;
     Criteria criteria;
     private GoogleMap map;
     double latA, lngA;
     String streetAddress;
-
     ArrayList<Lot> lots;
     ArrayList<Marker> garages;
     ArrayList<Polygon> polygons;
-    BooleansWithTags colorList;
-    BooleansWithTags timesList;
-    BooleansWithTags otherList;
+    BooleansWithTags colorList, timesList, otherList;
     LatLngBounds centerBounds;
+    Marker marker;
+
+    SharedPreferences sharedPreferences;
+//    ListPreference classificationList;
+//    NotificationManager notificationManager;
+    boolean mIsBound, timeSet, serviceOn, atLeastOneNotificationChecked;
+
     String popDownFragment = "no";  //current fragment in the popDown frame, "no" == empty
     int selectedIndex;              //index of selected Lot
     boolean moving = false;
@@ -70,11 +77,14 @@ public class MainActivity extends FragmentActivity implements
     ArrayList<LatLng> poss = new ArrayList<>();
     ArrayList<String> ids = new ArrayList<>();
     ArrayList<String> names = new ArrayList<>();
+    int hour, minute;
+    TimePicker timePicker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        intent = getIntent();
+//        intent = getIntent();
 
         GetData test = new GetData(new GetData.OnTaskCompleted() {
             @Override
@@ -82,7 +92,13 @@ public class MainActivity extends FragmentActivity implements
                 taskCompleted(products);
             }
         });
-        test.happen();
+
+        boolean networkConnectionAvailable = haveNetworkConnection();
+        boolean connected = test.isConnected(this, networkConnectionAvailable);
+
+        if(!connected){
+            alertDialogShow(this);
+        }
 
         /*
         Fragment fragment = new LegendFragment();
@@ -120,7 +136,30 @@ public class MainActivity extends FragmentActivity implements
             }
         });
 */
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        classificationList = new ListPreference(this);
+//        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        timePicker = new TimePicker(this);
+        timeSet = false; serviceOn = false; atLeastOneNotificationChecked = false;
+
+    }
+
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 
     @Override
@@ -134,8 +173,17 @@ public class MainActivity extends FragmentActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
+            case R.id.action_refresh:
+                finish();
+                startActivity(getIntent());
+                return true;
             case R.id.action_settings:
                 openSettings();
+                return true;
+            case R.id.action_help:
+                return true;
+            case R.id.action_alerts:
+                startActivity(new Intent(this, ResultActivity.class));
                 return true;
             case R.id.action_exit:
                 finish();
@@ -145,21 +193,122 @@ public class MainActivity extends FragmentActivity implements
 
     }
 
-    public void openSettings(){
-        @SuppressWarnings("rawtypes")
-        Class c = SettingsActivity.class;
-        Intent i = new Intent(this, c);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Retrieves SharedPreference value every time the app reloads.
+        // NotificationHandler notificationHandler = new NotificationHandler(this);
+  //      retrieveSharedPrefs();
 
-        startActivity(i);
+        if(lm != null)
+            getLocation();
+
+        Intent serviceIntent = new Intent(getApplicationContext(),
+                ParkansasNotificationService.class);
+
+        if(sharedPreferences != null){
+            if(sharedPreferences.getBoolean("prefNotificationSwitch", false)
+                    && ActivityUtils.atLeastOneNotificationChecked){
+                serviceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                serviceIntent.putExtra(ActivityUtils.ON_CAMPUS_BOOL, ActivityUtils.onCampus);
+                this.startService(serviceIntent);
+//            if(!mIsBound)
+//                doBindService();
+                ActivityUtils.serviceOn = true;
+            }
+        }
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        Log.i(ActivityUtils.APPTAG, "[Main Activity] onResume");
-//        //skipLogin = sharedPreferences.getBoolean(ActivityUtils.SKIP_LOGIN, false);
-//        getLocation();
+//    private void retrieveSharedPrefs(){
+//        if(sharedPreferences != null) {
+//
+//            Preference.OnPreferenceChangeListener listener = new Preference.OnPreferenceChangeListener() {
+//                @Override
+//                public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                    ActivityUtils.classificationSelection = newValue.toString();
+//                    return false;
+//                }
+//            };
+//            classificationList.setOnPreferenceChangeListener(listener);
+//
+//            if (sharedPreferences.getBoolean("prefNotificationSwitch", true)) {
+//                Set<String> selections = sharedPreferences.getStringSet("prefNotificationType", null);
+//                //           String[] selected = selections.toArray(new String[] {});
+//                if(selections != null)
+//                for (String s : selections) {
+//                    if (s.equals(getString(R.string.time_expiration))) {
+//                        ActivityUtils.timeExpirationNotificationOn = true;
+//                        atLeastOneNotificationChecked = true;
+//                    }
+//                    if (s.equals(getString(R.string.free_parking))) {
+//                        ActivityUtils.freeParkingNotificationOn = true;
+//                        atLeastOneNotificationChecked = true;
+//                    }
+//                    if (s.equals(getString(R.string.wake_up_call))) {
+//                        ActivityUtils.wakeUpCallOn = true;
+//                        atLeastOneNotificationChecked = true;
+//                    }
+//                    if (s.equals(getString(R.string.pre_game_day))) {
+//                        ActivityUtils.gameDayNotificationOn = true;
+//                        atLeastOneNotificationChecked = true;
+//                    }
+//                    if (s.equals(getString(R.string.harmon_notification))) {
+//                        ActivityUtils.harmonNotificationOn = true;
+//                        atLeastOneNotificationChecked = true;
+//                    }
+//                }
+//            }
+//            else{
+//                Intent serviceIntent = new Intent(getApplicationContext(),
+//                        ParkansasNotificationService.class);
+//                this.stopService(serviceIntent);
+//                serviceOn = false;
+//            }
+//
+//            Set<String> selections = sharedPreferences.getStringSet("prefUserPass", null);
+//            //           String[] selected = selections.toArray(new String[] {});
+//            if(selections != null)
+//
+//                for (String s : selections) {
+//                if (s.equals(getString(R.string.resident_reserved_text))) {
+//                    ActivityUtils.hasResidentReservedPass = true;
+//                }
+//                if (s.equals(getString(R.string.reserved_blue_text))) {
+//                    ActivityUtils.hasReservedPass = true;
+//                }
+//                if (s.equals(getString(R.string.reserved_faculty_text))) {
+//                    ActivityUtils.hasFacultyPass = true;
+//                }
+//                if (s.equals(getString(R.string.reserved_green_text))) {
+//                    ActivityUtils.hasStudentPass = true;
+//                }
+//                if (s.equals(getString(R.string.harmon_pass_text))) {
+//                    ActivityUtils.hasHarmonPass = true;
+//                }
+//                if (s.equals(getString(R.string.remote_pass_text))) {
+//                    ActivityUtils.hasRemotePass = true;
+//                }
+//                if (s.equals(getString(R.string.handicap_parking_text))) {
+//                    ActivityUtils.hasHandicapPass = true;
+//                }
+//            }
+//        }
 //    }
+
+    private void openSettings() {
+            @SuppressWarnings("rawtypes")
+            Intent i = new Intent(this, SettingsActivity.class);
+
+            startActivity(i);
+     }
+
+    private void alertDialogShow(Context context){
+        final AlertDialog.Builder adb = new AlertDialog.Builder(context);
+
+        AlertDialog ad = adb.create();
+        ad.setMessage("Parkansas failed to launch. Check cellular or Wi-Fi connection.");
+        ad.show();
+    }
 
     //returns true if tap point is inside polygon defined by arraylist
     private boolean isPointInPolygon(LatLng touchPoint, ArrayList<LatLng> vertices) {
@@ -208,21 +357,21 @@ public class MainActivity extends FragmentActivity implements
 
     //Creates Fragments and add them to map
 
-    public void addToolbarHomeFragment() {
+    private void addToolbarHomeFragment() {
         Fragment fragment = new ToolbarHomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container1, fragment);
         ft.commit();
     }
 
-    public void addToolbarFiltersFragment() {
+    private void addToolbarFiltersFragment() {
         Fragment fragment = new ToolbarFiltersFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container1, fragment);
         ft.commit();
     }
 
-    public void addToolbarFilterOptionsFragment(Bundle bundle) {
+    private void addToolbarFilterOptionsFragment(Bundle bundle) {
         Fragment fragment = new ToolbarFilterOptionsFragment();
         fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -230,7 +379,7 @@ public class MainActivity extends FragmentActivity implements
         ft.commit();
     }
 
-    public void addToolbarLotFragment(Bundle bundle) {
+    private void addToolbarLotFragment(Bundle bundle) {
         Fragment fragment = new ToolbarLotFragment();
         fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -238,7 +387,7 @@ public class MainActivity extends FragmentActivity implements
         ft.commit();
     }
 
-    public void addToolbarLotExtraFragment(Bundle bundle) {
+    private void addToolbarLotExtraFragment(Bundle bundle) {
         Fragment fragment = new ToolbarLotExtraFragment();
         fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -247,7 +396,7 @@ public class MainActivity extends FragmentActivity implements
     }
 
     //removes fragment with popDown tag, if it is nonempty.
-    public void removePopDownFragment() {
+    private void removePopDownFragment() {
         if(!popDownFragment.equals("no")) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.remove(getSupportFragmentManager().findFragmentByTag("popDown"));
@@ -367,7 +516,7 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
-    public void taskCompleted(JSONObject products){
+    private void taskCompleted(JSONObject products){
         colorList = new BooleansWithTags();
         colorList.add("Reserved", true);
         colorList.add("Faculty/Staff", true);
@@ -552,6 +701,7 @@ public class MainActivity extends FragmentActivity implements
     private void showLocation(double latA, double lngA) {
         LatLng location = new LatLng(latA, lngA);
         Geocoder geocoder;
+
         geocoder = new Geocoder(this, Locale.ENGLISH);
         try {
             List<Address> addresses = geocoder.getFromLocation(latA, lngA, 1);
@@ -576,11 +726,104 @@ public class MainActivity extends FragmentActivity implements
 
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 16);
         map.animateCamera(update);
-//        map.addMarker(new MarkerOptions().position(location).title(streetAddress));
-        map.addMarker(new MarkerOptions().position(location).title(streetAddress));
+
+        // remove previous marker
+        if(marker != null)
+            marker.remove();
+
+        marker = map.addMarker(new MarkerOptions().position(location).title(streetAddress));
+        ActivityUtils.onCampus = checkRadius(marker);
+
+        Log.i("OnCampus", "" + Boolean.toString(ActivityUtils.onCampus));
+
+//
+//        if(!conditionalsChecked) {
+////            if(sharedPreferences.getBoolean("prefNotificationSwitch", true) &&
+////                    atLeastOneNotificationChecked) {
+////                if(!serviceOn) {
+////                    Intent serviceIntent = new Intent(getApplicationContext(),
+////                            ParkansasNotificationService.class);
+////                    serviceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////                    serviceIntent.putExtra(ActivityUtils.ON_CAMPUS_BOOL, onCampus);
+////                    this.startService(serviceIntent);
+////
+////                    serviceOn = true;
+////                }
+//                alertConditionals(ActivityUtils.onCampus);
+//                conditionalsChecked = true;
+//
+////            }
+
+        }
+//        Intent intent = new Intent(this, ParkansasBackgroundService.class);
+//        intent.putExtra(ActivityUtils.ON_CAMPUS_BOOL, onCampus);
+//
+//        startService(intent);
+
+//    private void alertConditionals(boolean onCampusCheck){
+//       boolean between9and6 = checkTime();
+//        Log.i("Checking Time", ""+ between9and6 + " " + ActivityUtils.wakeUpCallOn);
+//        Log.i("Time Set", hour + ":" + minute);
+//
+//
+//            if (onCampusCheck) {
+//                if (between9and6 && ActivityUtils.wakeUpCallOn) {
+////                    showWakeUpNotification();
+//
+//                    if(!ActivityUtils.alarmTimeSet) {
+//                            showDialog(ActivityUtils.ALARM_ID);
+//                            Log.i("Time Set", hour + ":" + minute);
+//                        }
+//                }
+//            } else {
+//                if (ActivityUtils.timeExpirationNotificationOn) {
+//
+//                }
+//                if (ActivityUtils.gameDayNotificationOn) {
+//
+//                }
+//                if (ActivityUtils.freeParkingNotificationOn) {
+//
+//                }
+//                if (ActivityUtils.harmonNotificationOn && !ActivityUtils.hasHarmonPass) {
+//
+//                }
+//            }
+//    }
+
+//    public void showWakeUpNotification(){
+////        intent = getIntent();
+////        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, ActivityUtils.ALARM_ID, intent,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        Notification notification = new Notification.Builder(this)
+//                .setContentTitle(getString(R.string.app_name))
+//                .setStyle(new Notification.BigTextStyle().bigText(getString(R.string.wake_up_call_msg)))
+//                .setSmallIcon(R.mipmap.ic_launcher)
+//                .setContentIntent(pendingIntent)
+//                .setAutoCancel(true)
+//                .addAction(R.drawable.ic_suspend_alert,"Set Time", pendingIntent)
+//                .addAction(R.drawable.ic_dismiss_alert, getString(R.string.dismiss_text), pendingIntent)
+//                .build();
+//
+//        notification.defaults |= Notification.DEFAULT_ALL;
+//        notification.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONLY_ALERT_ONCE;
+//
+//        notificationManager.notify(ActivityUtils.NOTIFICATION_ID, notification);
+//
+//        if(timeSet)
+//            notificationManager.cancel(ActivityUtils.NOTIFICATION_ID);
+//    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        lm.removeUpdates(locationListener);
     }
 
-    public void setCriteria() {
+    private void setCriteria() {
         criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         criteria.setPowerRequirement(Criteria.POWER_LOW);
@@ -590,6 +833,81 @@ public class MainActivity extends FragmentActivity implements
         criteria.setCostAllowed(true);
     }
 
+    private boolean checkRadius(Marker marker){
+        double uarkLat = 36.067832;
+        double uarkLong = -94.173655;
+        float[] distances = new float[1];
+
+        Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude,
+                uarkLat, uarkLong, distances);
+
+        Log.i("Check Radius", "Meters from Campus: " + distances[0]);
+
+        if(distances[0] < (1609.34/2))
+            return true;
+        return false;
+    }
+
+//    private boolean checkTime() {
+//        String nine_oClock = "21:00:00";
+//        String six_oClock = "06:00:00";
+//        String today = (String) android.text.format.DateFormat.format("HH:mm:ss", new java.util.Date());
+//        Date todayDate = null, nineDate = null, sixDate = null;
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+//
+//        try {
+//            todayDate = simpleDateFormat.parse(today);
+//            nineDate = simpleDateFormat.parse(nine_oClock);
+//            sixDate = simpleDateFormat.parse(six_oClock);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        Log.i("Time. Today: ", todayDate + " 9:00 - " + nineDate + "Comparison: " +
+//                Boolean.toString((todayDate).after(nineDate)));
+//
+//        if (todayDate.after(nineDate) && todayDate.before(sixDate)) {
+//            return true;
+//        }
+//        else
+//            return true;
+//    }
+//
+//    @Override
+//    protected Dialog onCreateDialog(int id){
+//        TimePickerDialog timePickerDialog =
+//                new TimePickerDialog(this, timePickerListener, hour, minute, false);
+//
+//        timePickerDialog.setTitle(getString(R.string.wake_up_call));
+//        timePickerDialog.setMessage(getString(R.string.wake_up_call_alert));
+//        switch(id){
+//            case ActivityUtils.ALARM_ID:
+//                return timePickerDialog;
+//        }
+//        return null;
+//    }
+//
+//    private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
+//        @Override
+//        public void onTimeSet(TimePicker view, int hourOfDay, int nMinute) {
+//            hour = hourOfDay;
+//            minute = nMinute;
+//
+//            sharedPreferences.edit().putInt(ActivityUtils.HOUR_KEY, hour).apply();
+//            sharedPreferences.edit().putInt(ActivityUtils.MINUTE_KEY, minute).apply();
+//
+//            timePicker.setCurrentHour(sharedPreferences.getInt(ActivityUtils.HOUR_KEY, 0));
+//            timePicker.setCurrentMinute(sharedPreferences.getInt(ActivityUtils.MINUTE_KEY, 0));
+//
+//            ActivityUtils.alarmTimeSet = true;
+//            Log.i("Time Set", sharedPreferences.getInt(ActivityUtils.HOUR_KEY, 0) + ":" + minute);
+//            Toast.makeText(MainActivity.this, "Wake Up Call set for " +
+//                    sharedPreferences.getInt(ActivityUtils.HOUR_KEY, 0)+ ":" +
+//                    ((minute < 10)? "0"+sharedPreferences.getInt(ActivityUtils.MINUTE_KEY, 0):
+//                            sharedPreferences.getInt(ActivityUtils.MINUTE_KEY, 0)),
+//                            Toast.LENGTH_LONG).show();
+//        }
+//    };
 
 }
 

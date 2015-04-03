@@ -1,10 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="edu.uark.csce.parkansas.parkansas.MainActivity">
-    <item android:id="@+id/action_login" android:title="@string/login"
+    <item android:id="@+id/action_refresh" android:title="@string/refresh"
         android:orderInCategory="1"   android:showAsAction="never"/>
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="2" android:showAsAction="never" />
+    <item android:id="@+id/action_help" android:title="@string/title_activity_help"
+        android:orderInCategory="3" android:showAsAction="never" />
+    <item android:id="@+id/action_alerts" android:title="@string/alert_text"
+        android:orderInCategory="4" android:showAsAction="never" />
     <item android:id="@+id/action_exit" android:title="@string/quit_application"
-        android:orderInCategory="3"   android:showAsAction="never"/>
+        android:orderInCategory="5"   android:showAsAction="never"/>
 </menu>

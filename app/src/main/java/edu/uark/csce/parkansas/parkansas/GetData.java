@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 
@@ -30,8 +30,13 @@ public class GetData{
         this.listener=listener;
     }
 
-    public void happen() {
-        new LoadAllProducts().execute();
+    public boolean isConnected(Context context, boolean connectionAvailable){
+        if(connectionAvailable) {
+            new LoadAllProducts().execute();
+            return true;
+        }
+        else
+            return false;
     }
 
     public JSONObject getProducts(){

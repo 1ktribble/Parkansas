@@ -1,7 +1,6 @@
 package edu.uark.csce.parkansas.parkansas;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -71,7 +70,7 @@ public class ToolbarLotExtraFragment extends Fragment {
         TextView textView2 = (TextView) getView().findViewById(R.id.lotTimesText);
         textView2.setText(times);
 
-        TextView textView3 = (TextView) getView().findViewById(R.id.lotOtherText);
-        textView3.setText(other);
+ //       TextView textView3 = (TextView) getView().findViewById(R.id.lotOtherText);
+ //       textView3.setText(other);
     }
 }

@@ -2,17 +2,49 @@
 <resources>
 
     <string name="app_name">Parkansas</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="user_name">Username: </string>
-    <string name="password">Password: </string>
-    <string name="skip_text">Click here to skip</string>
-    <string name="login">Login</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="help_icon">Help</string>
-    <string name="default_name">Guest</string>
-    <string name="quit_application">Exit</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="home_text">Parkansas Home</string>
 
+    <string name="action_settings">Settings</string>
+    <string name="refresh">Refresh</string>
+    <string name="title_activity_help">Help</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="quit_application">Exit</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_result">Result Activity</string>
+
+    <string name="pre_game_day">Pre-GameDay Car Moving</string>
+    <string name="free_parking">Free Parking</string>
+    <string name="wake_up_call">Wake Up Call</string>
+    <string name="bus_stop">Bus Stop</string>
+    <string name="time_expiration">Time Expiration for Short-Term meters, Union Garage, etc.</string>
+    <string name="harmon_notification">Harmon Notification</string>
+
+    <string name="student_text">Student</string>
+    <string name="faculty_text">Faculty</string>
+    <string name="visitor_text">Visitor</string>
+    <string name="gameday_visitor_text">Gameday Visitor</string>
+
+    <string name="resident_reserved_text">Resident Reserved (Red)</string>
+    <string name="reserved_blue_text">Reserved (Blue)</string>
+    <string name="reserved_green_text">Student (Green)</string>
+    <string name="reserved_faculty_text">Faculty/Staff (Yellow)</string>
+    <string name="handicap_parking_text">ADA Parking</string>
+    <string name="harmon_pass_text">Harmon Pass</string>
+    <string name="remote_pass_text">Remote (Orange)</string>
+
+    <string name="alert_text">Alerts</string>
+
+    <string name="suspend_text">Suspend</string>
+    <string name="dismiss_text">Dismiss</string>
+
+    <string name="default_text">e.g. My Alert</string>
+    <string name="wake_up_call_msg">You currently have Wake Up Call enabled. Would you like to use
+    Wake Up Call to set an alarm before 7:00 AM (Ticket Time)?</string>
+    <string name="wake_up_call_alert">We recommended you set a time prior to 7:00 AM.</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_alert_info">AlertInfoActivity</string>
 </resources>

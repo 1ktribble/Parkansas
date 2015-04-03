@@ -7,28 +7,43 @@ import android.text.format.Time;
  * Created by Kai Tribble on 12/5/2014.
  */
 public class ActivityUtils {
-    public static final String APPTAG = "Capstone: Parkansas";
+    public static final String ON_CAMPUS_BOOL = "edu.uark.csce.parkansas.parkansas.ON_CAMPUS_BOOL";
+    public static final String EXTRA_MESSAGE = "edu.uark.csce.parkansas.parkansas.EXTRA_MESSAGE";
+    public static final String ALERT_NAME_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_NAME_KEY";
+    public static final String ALERT_TIME_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_TIME_KEY";
+    public static final String ALERT_DAY_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_DAY_KEY";
+    public static final String ALERT_ON_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_ON_KEY";
+    public static final String HOUR_KEY = "edu.uark.csce.parkansas.parkansas.HOUR_KEY";
+    public static final String MINUTE_KEY = "edu.uark.csce.parkansas.parkansas.MINUTE_KEY";
 
-    public static final String SKIP_LOGIN = "skipLogin";
-    public static final String LOGIN_SUCCESS = "successLogin";
+    public static final String ACTION_SUSPEND = "edu.uark.csce.parkansas.parkansas.ACTION_SUSPEND";
+    public static final String ACTION_DISMISS = "edu.uark.csce.parkansas.parkansas.ACTION_DISMISS";
+    public static final String CLOCK_VALUE = "edu.uark.csce.parkansas.parkansas.CLOCK_VALUE";
+    public static final String TIMER_VALUE = "edu.uark.csce.parkanas.parkansas.TIMER_VALUE";
 
-    public static final String USERNAME = "prefUserName";
-    public static final String PASSWORD = "prefPassword";
-    public static final String FIRST_NAME = "prefFirstName";
-    public static final String LAST_NAME = "prefLastName";
-    public static final String PASS_TYPE = "prefPassType";
+    public static boolean wakeUpCallOn = false, gameDayNotificationOn = false, onCampus = false,
+            freeParkingNotificationOn = false, timeExpirationNotificationOn = false,
+            harmonNotificationOn = false, hasResidentReservedPass = false, hasReservedPass = false,
+            hasStudentPass = false, hasFacultyPass = false, hasHarmonPass = false, hasHandicapPass = false,
+            hasRemotePass = false, alarmTimeSet = false, moveCarTimeSet = false, serviceOn = false,
+            atLeastOneNotificationChecked = false;
 
-    public static final int LOGIN = 1;
-    public static final int LOGIN_RETURN = 2;
-    public static final int SETTINGS = 8;
-    public static final int QUIT = 9;
+    public static String classificationSelection = "";
+
+    public static final int SNOOZE_DURATION = 20000;
+    public static final int DEFAULT_TIMER_DURATION = 10000;
+
+    public static final int NOTIFICATION_ID = 101;
+    public static final int ALARM_ID = 90210;
+    public static final int TIME_ALERT_ID = 300;
+
+    public static final int ALERT_RETURN_INT = 989;
+    public static final int PREFERENCE_RETURN_INT = 898;
 
     public final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     public static final String SHARED_PREFERENCES =
             "edu.uark.csce.parkansas.parkansas.SHARED_PREFERENCES";
-
-    private Service mService;
 
     private static ActivityUtils instance = null;
 
@@ -42,12 +57,9 @@ public class ActivityUtils {
         return instance;
     }
 
-    public void setService(Service service) {
-        mService = service;
-    }
-
     public static long currentTimeInMillis() {
-        Time time = new Time();
+        Time time = null;
+        time = new Time(time.getCurrentTimezone());
         time.setToNow();
         return time.toMillis(false);
     }
