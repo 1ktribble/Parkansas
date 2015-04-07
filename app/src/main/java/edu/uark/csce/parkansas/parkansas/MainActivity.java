@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -480,9 +481,11 @@ public class MainActivity extends FragmentActivity implements
                     for (int index = 0; index < poss.size(); index++) {
                         garages.add(map.addMarker(new MarkerOptions()
                                 .position(poss.get(index))
-                                .title(names.get(index))));
+                                .title(names.get(index))
+//                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g))));
                     }
-                }
+            }
 
         });
 
@@ -565,7 +568,7 @@ public class MainActivity extends FragmentActivity implements
                 }
                 streetAddress = (strReturnedAddress.toString());
             }
-            else{
+            else {
                 streetAddress = ("No Address returned!");
             }
         } catch (IOException e) {
@@ -576,8 +579,10 @@ public class MainActivity extends FragmentActivity implements
 
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 16);
         map.animateCamera(update);
-//        map.addMarker(new MarkerOptions().position(location).title(streetAddress));
-        map.addMarker(new MarkerOptions().position(location).title(streetAddress));
+        map.addMarker(new MarkerOptions()
+                .position(location)
+                .title(streetAddress)
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.current)));
     }
 
     public void setCriteria() {

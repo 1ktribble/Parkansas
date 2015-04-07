@@ -1,13 +1,12 @@
 package edu.uark.csce.parkansas.parkansas;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 
 public class ToolbarHomeFragment extends Fragment {
 
@@ -51,10 +50,10 @@ public class ToolbarHomeFragment extends Fragment {
             }
         };
 
-        Button btn = (Button) getView().findViewById(R.id.lotFiltersBtn);
+        ImageView btn = (ImageView) getView().findViewById(R.id.lotFiltersBtn);
         btn.setOnClickListener(onClickListener);
 
-        Button btn2 = (Button) getView().findViewById(R.id.centerBtn);
+        ImageView btn2 = (ImageView) getView().findViewById(R.id.centerBtn);
         btn2.setOnClickListener(onClickListener);
     }
 }
