@@ -1,6 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="edu.uark.csce.parkansas.parkansas.ResultActivity">
+    <item android:id="@+id/action_add_alert" android:title="@string/add_alert_text"
+        android:icon="@drawable/ic_add_alert_no_trim_midpadding" android:orderInCategory="1"
+        android:showAsAction="ifRoom|withText"/>
     <item android:id="@+id/action_home" android:title="@string/home_text"
-        android:orderInCategory="100" android:showAsAction="never" />
+        android:orderInCategory="2" android:showAsAction="never" />
 </menu>

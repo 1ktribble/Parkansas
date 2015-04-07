@@ -104,23 +104,34 @@ public class SettingsActivity extends PreferenceActivity
                 if(selections != null)
                     for (String s : selections) {
                         if (s.equals(getString(R.string.time_expiration))) {
-                            ActivityUtils.timeExpirationNotificationOn = true;
+                        //    ActivityUtils.timeExpirationNotificationOn = true;
+                        // use SharedPreferences instead of Globals
+                            sharedPreferences.edit().putBoolean(ActivityUtils.TIME_EXPIRATION_ALERT, true)
+                                    .apply();
                             ActivityUtils.atLeastOneNotificationChecked = true;
                         }
                         if (s.equals(getString(R.string.free_parking))) {
-                            ActivityUtils.freeParkingNotificationOn = true;
+                        //    ActivityUtils.freeParkingNotificationOn = true;
+                            sharedPreferences.edit().putBoolean(ActivityUtils.FREE_PARKING_ALERT, true)
+                                    .apply();
                             ActivityUtils.atLeastOneNotificationChecked = true;
                         }
                         if (s.equals(getString(R.string.wake_up_call))) {
-                            ActivityUtils.wakeUpCallOn = true;
+                        //    ActivityUtils.wakeUpCallOn = true;
+                            sharedPreferences.edit().putBoolean(ActivityUtils.WAKEUP_ALERT, true)
+                                    .apply();
                             ActivityUtils.atLeastOneNotificationChecked = true;
                         }
                         if (s.equals(getString(R.string.pre_game_day))) {
-                            ActivityUtils.gameDayNotificationOn = true;
+                        //    ActivityUtils.gameDayNotificationOn = true;
+                            sharedPreferences.edit().putBoolean(ActivityUtils.GAMEDAY_ALERT, true)
+                                    .apply();
                             ActivityUtils.atLeastOneNotificationChecked = true;
                         }
                         if (s.equals(getString(R.string.harmon_notification))) {
-                            ActivityUtils.harmonNotificationOn = true;
+                        //    ActivityUtils.harmonNotificationOn = true;
+                            sharedPreferences.edit().putBoolean(ActivityUtils.HARMON_ALERT, true)
+                                    .apply();
                             ActivityUtils.atLeastOneNotificationChecked = true;
                         }
                     }
@@ -132,78 +143,50 @@ public class SettingsActivity extends PreferenceActivity
 
                 for (String s : selections) {
                     if (s.equals(getString(R.string.resident_reserved_text))) {
-                        ActivityUtils.hasResidentReservedPass = true;
+                    //    ActivityUtils.hasResidentReservedPass = true;
+                        sharedPreferences.edit().putBoolean(ActivityUtils.RESIDENT_RESERVED, true)
+                                .apply();
                     }
                     if (s.equals(getString(R.string.reserved_blue_text))) {
-                        ActivityUtils.hasReservedPass = true;
+                    //    ActivityUtils.hasReservedPass = true;
+                        sharedPreferences.edit().putBoolean(ActivityUtils.RESERVED_PASS, true)
+                                .apply();
                     }
                     if (s.equals(getString(R.string.reserved_faculty_text))) {
-                        ActivityUtils.hasFacultyPass = true;
+                    //    ActivityUtils.hasFacultyPass = true;
+                        sharedPreferences.edit().putBoolean(ActivityUtils.FACULTY_PASS, true)
+                                .apply();
                     }
                     if (s.equals(getString(R.string.reserved_green_text))) {
-                        ActivityUtils.hasStudentPass = true;
+                    //    ActivityUtils.hasStudentPass = true;
+                        sharedPreferences.edit().putBoolean(ActivityUtils.STUDENT_PASS, true)
+                                .apply();
                     }
                     if (s.equals(getString(R.string.harmon_pass_text))) {
-                        ActivityUtils.hasHarmonPass = true;
+                    //    ActivityUtils.hasHarmonPass = true;
+                        sharedPreferences.edit().putBoolean(ActivityUtils.HARMON_PASS, true)
+                                .apply();
                     }
                     if (s.equals(getString(R.string.remote_pass_text))) {
-                        ActivityUtils.hasRemotePass = true;
+                    //    ActivityUtils.hasRemotePass = true;
+                        sharedPreferences.edit().putBoolean(ActivityUtils.REMOTE_PASS, true)
+                                .apply();
                     }
                     if (s.equals(getString(R.string.handicap_parking_text))) {
-                        ActivityUtils.hasHandicapPass = true;
+                    //    ActivityUtils.hasHandicapPass = true;
+                        sharedPreferences.edit().putBoolean(ActivityUtils.ADA_PASS, true)
+                                .apply();
                     }
                 }
-        if(ActivityUtils.serviceOn && sharedPreferences.getBoolean("prefNotificationSwitch", false)){
+        if(ActivityUtils.serviceOn && !sharedPreferences.getBoolean("prefNotificationSwitch", false)){
             this.stopService(serviceIntent);
             ActivityUtils.serviceOn = false;
- //           doUnbindService();
         }
 
         Toast.makeText(getApplicationContext(), "Settings Saved", Toast.LENGTH_LONG).show();
 
     }
 
-//    private ParkansasNotificationService mBoundService;
-//
-//    private ServiceConnection mConnection = new ServiceConnection() {
-//        public void onServiceConnected(ComponentName className, IBinder service) {
-//            // This is called when the connection with the service has been
-//            // established, giving us the service object we can use to
-//            // interact with the service.  Because we have bound to a explicit
-//            // service that we know is running in our own process, we can
-//            // cast its IBinder to a concrete class and directly access it.
-//            mBoundService = ((ParkansasNotificationService.LocalBinder)service).getService();
-//
-//            // Tell the user about this for our demo.
-//            Toast.makeText(SettingsActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        public void onServiceDisconnected(ComponentName className) {
-//            // This is called when the connection with the service has been
-//            // unexpectedly disconnected -- that is, its process crashed.
-//            // Because it is running in our same process, we should never
-//            // see this happen.
-//            mBoundService = null;
-//            Toast.makeText(SettingsActivity.this, "Service Disconnected", Toast.LENGTH_SHORT).show();
-//        }
-//    };
-//
-//    void doBindService() {
-//        // Establish a connection with the service.  We use an explicit
-//        // class name because we want a specific service implementation that
-//        // we know will be running in our own process (and thus won't be
-//        // supporting component replacement by other applications).
-//        bindService(new Intent(SettingsActivity.this,
-//                ParkansasNotificationService.class), mConnection, Context.BIND_AUTO_CREATE);
-//        mIsBound = true;
-//    }
-//
-//    void doUnbindService() {
-//        if (mIsBound) {
-//            // Detach our existing connection.
-//            unbindService(mConnection);
-//            mIsBound = false;
-//        }
-//    }
+
 
 }

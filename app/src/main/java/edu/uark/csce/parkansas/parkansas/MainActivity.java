@@ -100,42 +100,42 @@ public class MainActivity extends FragmentActivity implements
             alertDialogShow(this);
         }
 
-        /*
-        Fragment fragment = new LegendFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container3, fragment);
-        ft.commit();
-
-
-        final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.container3);
-        frameLayout.setX(200);
-        frameLayout.setY(200);
-
-
-        frameLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                Log.i("hello", "hello");
-                switch (arg1.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        moving = true;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (moving) {
-                            x = arg1.getRawX() - frameLayout.getWidth()/2;
-                            y = arg1.getRawY() - frameLayout.getHeight()*3/2;
-                            frameLayout.setX(x);
-                            frameLayout.setY(y);
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        moving = false;
-                        break;
-                }
-                return true;
-            }
-        });
-*/
+//        /*
+//        Fragment fragment = new LegendFragment();
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ft.replace(R.id.container3, fragment);
+//        ft.commit();
+//
+//
+//        final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.container3);
+//        frameLayout.setX(200);
+//        frameLayout.setY(200);
+//
+//
+//        frameLayout.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View arg0, MotionEvent arg1) {
+//                Log.i("hello", "hello");
+//                switch (arg1.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        moving = true;
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        if (moving) {
+//                            x = arg1.getRawX() - frameLayout.getWidth()/2;
+//                            y = arg1.getRawY() - frameLayout.getHeight()*3/2;
+//                            frameLayout.setX(x);
+//                            frameLayout.setY(y);
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        moving = false;
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
+//*/
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 //        classificationList = new ListPreference(this);
 //        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -180,13 +180,8 @@ public class MainActivity extends FragmentActivity implements
             case R.id.action_settings:
                 openSettings();
                 return true;
-            case R.id.action_help:
-                return true;
             case R.id.action_alerts:
                 startActivity(new Intent(this, ResultActivity.class));
-                return true;
-            case R.id.action_exit:
-                finish();
                 return true;
         }
         return false;
@@ -218,82 +213,6 @@ public class MainActivity extends FragmentActivity implements
             }
         }
     }
-
-//    private void retrieveSharedPrefs(){
-//        if(sharedPreferences != null) {
-//
-//            Preference.OnPreferenceChangeListener listener = new Preference.OnPreferenceChangeListener() {
-//                @Override
-//                public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                    ActivityUtils.classificationSelection = newValue.toString();
-//                    return false;
-//                }
-//            };
-//            classificationList.setOnPreferenceChangeListener(listener);
-//
-//            if (sharedPreferences.getBoolean("prefNotificationSwitch", true)) {
-//                Set<String> selections = sharedPreferences.getStringSet("prefNotificationType", null);
-//                //           String[] selected = selections.toArray(new String[] {});
-//                if(selections != null)
-//                for (String s : selections) {
-//                    if (s.equals(getString(R.string.time_expiration))) {
-//                        ActivityUtils.timeExpirationNotificationOn = true;
-//                        atLeastOneNotificationChecked = true;
-//                    }
-//                    if (s.equals(getString(R.string.free_parking))) {
-//                        ActivityUtils.freeParkingNotificationOn = true;
-//                        atLeastOneNotificationChecked = true;
-//                    }
-//                    if (s.equals(getString(R.string.wake_up_call))) {
-//                        ActivityUtils.wakeUpCallOn = true;
-//                        atLeastOneNotificationChecked = true;
-//                    }
-//                    if (s.equals(getString(R.string.pre_game_day))) {
-//                        ActivityUtils.gameDayNotificationOn = true;
-//                        atLeastOneNotificationChecked = true;
-//                    }
-//                    if (s.equals(getString(R.string.harmon_notification))) {
-//                        ActivityUtils.harmonNotificationOn = true;
-//                        atLeastOneNotificationChecked = true;
-//                    }
-//                }
-//            }
-//            else{
-//                Intent serviceIntent = new Intent(getApplicationContext(),
-//                        ParkansasNotificationService.class);
-//                this.stopService(serviceIntent);
-//                serviceOn = false;
-//            }
-//
-//            Set<String> selections = sharedPreferences.getStringSet("prefUserPass", null);
-//            //           String[] selected = selections.toArray(new String[] {});
-//            if(selections != null)
-//
-//                for (String s : selections) {
-//                if (s.equals(getString(R.string.resident_reserved_text))) {
-//                    ActivityUtils.hasResidentReservedPass = true;
-//                }
-//                if (s.equals(getString(R.string.reserved_blue_text))) {
-//                    ActivityUtils.hasReservedPass = true;
-//                }
-//                if (s.equals(getString(R.string.reserved_faculty_text))) {
-//                    ActivityUtils.hasFacultyPass = true;
-//                }
-//                if (s.equals(getString(R.string.reserved_green_text))) {
-//                    ActivityUtils.hasStudentPass = true;
-//                }
-//                if (s.equals(getString(R.string.harmon_pass_text))) {
-//                    ActivityUtils.hasHarmonPass = true;
-//                }
-//                if (s.equals(getString(R.string.remote_pass_text))) {
-//                    ActivityUtils.hasRemotePass = true;
-//                }
-//                if (s.equals(getString(R.string.handicap_parking_text))) {
-//                    ActivityUtils.hasHandicapPass = true;
-//                }
-//            }
-//        }
-//    }
 
     private void openSettings() {
             @SuppressWarnings("rawtypes")
@@ -755,72 +674,12 @@ public class MainActivity extends FragmentActivity implements
 ////            }
 
         }
-//        Intent intent = new Intent(this, ParkansasBackgroundService.class);
-//        intent.putExtra(ActivityUtils.ON_CAMPUS_BOOL, onCampus);
-//
-//        startService(intent);
-
-//    private void alertConditionals(boolean onCampusCheck){
-//       boolean between9and6 = checkTime();
-//        Log.i("Checking Time", ""+ between9and6 + " " + ActivityUtils.wakeUpCallOn);
-//        Log.i("Time Set", hour + ":" + minute);
-//
-//
-//            if (onCampusCheck) {
-//                if (between9and6 && ActivityUtils.wakeUpCallOn) {
-////                    showWakeUpNotification();
-//
-//                    if(!ActivityUtils.alarmTimeSet) {
-//                            showDialog(ActivityUtils.ALARM_ID);
-//                            Log.i("Time Set", hour + ":" + minute);
-//                        }
-//                }
-//            } else {
-//                if (ActivityUtils.timeExpirationNotificationOn) {
-//
-//                }
-//                if (ActivityUtils.gameDayNotificationOn) {
-//
-//                }
-//                if (ActivityUtils.freeParkingNotificationOn) {
-//
-//                }
-//                if (ActivityUtils.harmonNotificationOn && !ActivityUtils.hasHarmonPass) {
-//
-//                }
-//            }
-//    }
-
-//    public void showWakeUpNotification(){
-////        intent = getIntent();
-////        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, ActivityUtils.ALARM_ID, intent,
-//                PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        Notification notification = new Notification.Builder(this)
-//                .setContentTitle(getString(R.string.app_name))
-//                .setStyle(new Notification.BigTextStyle().bigText(getString(R.string.wake_up_call_msg)))
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setContentIntent(pendingIntent)
-//                .setAutoCancel(true)
-//                .addAction(R.drawable.ic_suspend_alert,"Set Time", pendingIntent)
-//                .addAction(R.drawable.ic_dismiss_alert, getString(R.string.dismiss_text), pendingIntent)
-//                .build();
-//
-//        notification.defaults |= Notification.DEFAULT_ALL;
-//        notification.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONLY_ALERT_ONCE;
-//
-//        notificationManager.notify(ActivityUtils.NOTIFICATION_ID, notification);
-//
-//        if(timeSet)
-//            notificationManager.cancel(ActivityUtils.NOTIFICATION_ID);
-//    }
 
     @Override
     protected void onPause(){
         super.onPause();
-        lm.removeUpdates(locationListener);
+        if(locationListener != null && lm != null)
+          lm.removeUpdates(locationListener);
     }
 
     private void setCriteria() {
@@ -847,67 +706,6 @@ public class MainActivity extends FragmentActivity implements
             return true;
         return false;
     }
-
-//    private boolean checkTime() {
-//        String nine_oClock = "21:00:00";
-//        String six_oClock = "06:00:00";
-//        String today = (String) android.text.format.DateFormat.format("HH:mm:ss", new java.util.Date());
-//        Date todayDate = null, nineDate = null, sixDate = null;
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-//
-//        try {
-//            todayDate = simpleDateFormat.parse(today);
-//            nineDate = simpleDateFormat.parse(nine_oClock);
-//            sixDate = simpleDateFormat.parse(six_oClock);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        Log.i("Time. Today: ", todayDate + " 9:00 - " + nineDate + "Comparison: " +
-//                Boolean.toString((todayDate).after(nineDate)));
-//
-//        if (todayDate.after(nineDate) && todayDate.before(sixDate)) {
-//            return true;
-//        }
-//        else
-//            return true;
-//    }
-//
-//    @Override
-//    protected Dialog onCreateDialog(int id){
-//        TimePickerDialog timePickerDialog =
-//                new TimePickerDialog(this, timePickerListener, hour, minute, false);
-//
-//        timePickerDialog.setTitle(getString(R.string.wake_up_call));
-//        timePickerDialog.setMessage(getString(R.string.wake_up_call_alert));
-//        switch(id){
-//            case ActivityUtils.ALARM_ID:
-//                return timePickerDialog;
-//        }
-//        return null;
-//    }
-//
-//    private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
-//        @Override
-//        public void onTimeSet(TimePicker view, int hourOfDay, int nMinute) {
-//            hour = hourOfDay;
-//            minute = nMinute;
-//
-//            sharedPreferences.edit().putInt(ActivityUtils.HOUR_KEY, hour).apply();
-//            sharedPreferences.edit().putInt(ActivityUtils.MINUTE_KEY, minute).apply();
-//
-//            timePicker.setCurrentHour(sharedPreferences.getInt(ActivityUtils.HOUR_KEY, 0));
-//            timePicker.setCurrentMinute(sharedPreferences.getInt(ActivityUtils.MINUTE_KEY, 0));
-//
-//            ActivityUtils.alarmTimeSet = true;
-//            Log.i("Time Set", sharedPreferences.getInt(ActivityUtils.HOUR_KEY, 0) + ":" + minute);
-//            Toast.makeText(MainActivity.this, "Wake Up Call set for " +
-//                    sharedPreferences.getInt(ActivityUtils.HOUR_KEY, 0)+ ":" +
-//                    ((minute < 10)? "0"+sharedPreferences.getInt(ActivityUtils.MINUTE_KEY, 0):
-//                            sharedPreferences.getInt(ActivityUtils.MINUTE_KEY, 0)),
-//                            Toast.LENGTH_LONG).show();
-//        }
-//    };
 
 }
 

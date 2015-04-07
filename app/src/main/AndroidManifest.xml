@@ -51,6 +51,11 @@
             android:name=".HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>
+        <activity
+            android:name=".DismissAlert"
+            android:taskAffinity=""
+            android:excludeFromRecents="true">
+        </activity>
 
         <service
             android:name=".ParkansasNotificationService"

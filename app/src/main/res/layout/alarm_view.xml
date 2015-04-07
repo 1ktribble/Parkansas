@@ -12,11 +12,14 @@
         android:textSize="15dp"
         android:textAlignment="center"
         android:textStyle="bold"
-        android:layout_alignTop="@+id/dayText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/dayText"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/red"
         android:layout_toLeftOf="@+id/dayText"
-        android:layout_toStartOf="@+id/dayText" />
+        android:background="@color/gray" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,9 +29,11 @@
         android:id="@+id/dayText"
         android:padding="15dp"
         android:textSize="15dp"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray"
         android:layout_toLeftOf="@+id/timeText"
-        android:layout_toStartOf="@+id/timeText" />
+        android:textColor="@color/Gold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,5 +45,8 @@
         android:textSize="15dp"
         android:layout_alignTop="@+id/dayText"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray"
+        android:textColor="@color/Gold" />
 </RelativeLayout>

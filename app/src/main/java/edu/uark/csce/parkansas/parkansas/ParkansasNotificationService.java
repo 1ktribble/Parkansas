@@ -29,8 +29,9 @@ public class ParkansasNotificationService extends Service {
 
     private NotificationCompat.Builder builder;
     private SharedPreferences sharedPreferences;
-    private boolean onCampusCheck, between9and6;
-    private Intent notificationIntent, setTimeIntent, dismissIntent;
+    private boolean onCampusCheck, betweenSevenAndFive, betweenSevenAndEight;
+    private Intent notificationIntent;
+    private PendingIntent setTimeIntent, dismissIntent;
     private ListPreference classificationList;
     private NotificationManager notificationManager;
 
@@ -62,8 +63,7 @@ public class ParkansasNotificationService extends Service {
         classificationList = new ListPreference(this);
 
         notificationIntent = new Intent(this, ResultActivity.class);
-        setTimeIntent = notificationIntent;
-        dismissIntent = new Intent(this, CancelAlarmReceiver.class);
+
     }
 
     @Override
@@ -74,65 +74,47 @@ public class ParkansasNotificationService extends Service {
 
         if(intent != null) {
             onCampusCheck = ActivityUtils.onCampus;
-            between9and6 = checkTime();
 //            Toast.makeText(this, "Notifications On", Toast.LENGTH_SHORT).show();
 
             if (onCampusCheck) {
-                if (/*between9and6 && */ActivityUtils.wakeUpCallOn) {
-                    if(sharedPreferences.getBoolean("alertHasBeenSet", false)) {
+                if (/*between9and6 && */sharedPreferences.getBoolean(ActivityUtils.WAKEUP_ALERT, false)) {
+                    if (sharedPreferences.getBoolean(ActivityUtils.ALERT_TIME_SET, false)) {
 //                        notificationManager.cancel(ActivityUtils.NOTIFICATION_ID);
-                    }else{
+                    } else {
 //                        showWakeUpNotification();
                     }
                 }
-            } else {
-                if (ActivityUtils.timeExpirationNotificationOn) {
+            }                // TODO: Handle this Notification
+                if (sharedPreferences.getBoolean(ActivityUtils.TIME_EXPIRATION_ALERT, false)) {
+                    // if the user indicated he parked in Garland Garage, Meadow Avenue, or any
+                    // of the Short-Term or Long-Term lots.
+                    boolean testBool = false;
+                    if(!testBool){
+                        showTimeExpirationNotification();
+                    }
 
                 }
-                if (ActivityUtils.gameDayNotificationOn) {
+                // TODO: Handle this Notification
+                if (sharedPreferences.getBoolean(ActivityUtils.GAMEDAY_ALERT, false)) {
+                    // TODO: Start New Service
 
                 }
-                if (ActivityUtils.freeParkingNotificationOn) {
+
+                // Dakota handles these
+                if (sharedPreferences.getBoolean(ActivityUtils.FREE_PARKING_ALERT, false)) {
 
                 }
-                if (ActivityUtils.harmonNotificationOn && !ActivityUtils.hasHarmonPass) {
+                if (sharedPreferences.getBoolean(ActivityUtils.HARMON_ALERT, false)
+                        && !(sharedPreferences.getBoolean(ActivityUtils.HARMON_PASS, false))) {
 
                 }
             }
-        }
+
 
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
     }
-
-//    @Override
-//    protected void onStartCommand(Intent intent) {
-//        if(intent != null) {
-//            onCampusCheck = ActivityUtils.onCampus;
-//            between9and6 = checkTime();
-//            Toast.makeText(this, "Notifications On", Toast.LENGTH_SHORT).show();
-//
-//            if (onCampusCheck) {
-//                if (between9and6 && ActivityUtils.wakeUpCallOn) {
-//                    showWakeUpNotification();
-//                }
-//            } else {
-//                if (ActivityUtils.timeExpirationNotificationOn) {
-//
-//                }
-//                if (ActivityUtils.gameDayNotificationOn) {
-//
-//                }
-//                if (ActivityUtils.freeParkingNotificationOn) {
-//
-//                }
-//                if (ActivityUtils.harmonNotificationOn && !ActivityUtils.hasHarmonPass) {
-//
-//                }
-//            }
-//        }
-//    }
 
     @Override
     public void onDestroy(){
@@ -144,7 +126,7 @@ public class ParkansasNotificationService extends Service {
     private void showWakeUpNotification(){
 
         PendingIntent pendingIntentSetTime = PendingIntent.getActivity(this,
-                ActivityUtils.ALARM_ID, setTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                ActivityUtils.ALARM_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.app_name))
@@ -163,31 +145,51 @@ public class ParkansasNotificationService extends Service {
     }
 
     private boolean checkTime() {
-        String nine_oClock = "21:00:00";
-        String six_oClock = "06:00:00";
+        String five_oClock = "17:00:00";
+        String eight_oClock = "08:00:00";
+        String seven_oClock = "07:00:00";
         String today = (String) android.text.format.DateFormat.format("HH:mm:ss", new java.util.Date());
-        Date todayDate = null, nineDate = null, sixDate = null;
+        Date todayDate = null, endTimeDateFive = null, endTimeDateEight = null, startTimeDateSeven = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
 
         try {
             todayDate = simpleDateFormat.parse(today);
-            nineDate = simpleDateFormat.parse(nine_oClock);
-            sixDate = simpleDateFormat.parse(six_oClock);
+            startTimeDateSeven = simpleDateFormat.parse(seven_oClock);
+            endTimeDateFive = simpleDateFormat.parse(five_oClock);
+            endTimeDateEight = simpleDateFormat.parse(eight_oClock);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Log.i("Time. Today: ", todayDate + " 9:00 - " + nineDate + "Comparison: " +
-                Boolean.toString((todayDate).after(nineDate)));
+//        Log.i("Time. Today: ", todayDate + " 9:00 - " + nineDate + "Comparison: " +
+//                Boolean.toString((todayDate).after(nineDate)));
 
-        if (todayDate.after(nineDate)) {
+        if (todayDate.after(endTimeDateFive)) {
             return true;
         }
-        if(todayDate.before(sixDate)){
+        if(todayDate.before(startTimeDateSeven)){
             return true;
         }
         else
             return false;
     }
 
+    private void showTimeExpirationNotification(){
+        setTimeIntent = PendingIntent.getActivity(this,
+                ActivityUtils.ALARM_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        dismissIntent = DismissAlert.getDismissIntent(ActivityUtils.NOTIFICATION_ID, this);
+
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle(getString(R.string.time_expiration))
+                .setStyle(new Notification.BigTextStyle().bigText(getString(R.string.time_expiration_pre_msg)))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(setTimeIntent)
+                .setAutoCancel(true)
+                .build();
+
+        notification.defaults |= Notification.DEFAULT_ALL;
+        notification.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONLY_ALERT_ONCE;
+
+        notificationManager.notify(ActivityUtils.NOTIFICATION_ID, notification);
+    }
 }

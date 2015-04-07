@@ -7,7 +7,6 @@ import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -29,7 +28,7 @@ import java.util.Calendar;
 
 public class ResultActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    private Intent intent;
+    private static Intent intent;
     private AlertItemAdapter adapter;
     private ArrayList<AlertData> alertList;
     private int hour, minute;
@@ -42,11 +41,13 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+
         if(alertList == null) {
             alertList = new ArrayList<AlertData>();
         }
         timePicker = new TimePicker(this);
-        ActivityUtils.alarmTimeSet = false;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         aData = new AlertData(false, "", "", "", "", System.currentTimeMillis(), 0, 0);
@@ -103,6 +104,10 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
 //            startActivityForResult(intent, ActivityUtils.PREFERENCE_RETURN_INT);
             return true;
         }
+        if(id == R.id.action_add_alert){
+            // Alert Dialog to add alert
+            return true;
+        }
 
        return false;
     }
@@ -132,11 +137,7 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
             }
             case(ActivityUtils.ALERT_RETURN_INT):{
                 if(resCode == Activity.RESULT_OK){
-//                    StringBuilder sb = new StringBuilder();
-//
-//                    sb.append((hour < 10) ? "0" + hour : hour)
-//                            .append(":")
-//                            .append((minute < 10) ? "0" + minute : minute);
+
                     if(sharedPreferences.getString("alertDaySettings", "").equals("Alert Me Today")){
                         Calendar now = Calendar.getInstance();
                         int currentDay = now.get(Calendar.DAY_OF_WEEK);
@@ -243,7 +244,7 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
     private void alertConditionals(boolean onCampusCheck){
 
             if (onCampusCheck) {
-                if (ActivityUtils.wakeUpCallOn) {
+                if (sharedPreferences.getBoolean(ActivityUtils.WAKEUP_ALERT, false)) {
 //                    showWakeUpNotification();
 
                     if(!(sharedPreferences.getBoolean("alertHasBeenSet", false))) {
@@ -251,20 +252,21 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
   //                          Log.i("Time Set", hour + ":" + minute);
                         }
                 }
-            } else {
-                if (ActivityUtils.timeExpirationNotificationOn) {
-
-                }
-                if (ActivityUtils.gameDayNotificationOn) {
-
-                }
-                if (ActivityUtils.freeParkingNotificationOn) {
-
-                }
-                if (ActivityUtils.harmonNotificationOn && !ActivityUtils.hasHarmonPass) {
-
-                }
             }
+               if (sharedPreferences.getBoolean(ActivityUtils.TIME_EXPIRATION_ALERT, false)) {
+                         showDialog(ActivityUtils.ALARM_ID);
+
+                }
+//                if (ActivityUtils.gameDayNotificationOn) {
+//
+//                }
+//                if (ActivityUtils.freeParkingNotificationOn) {
+//
+//                }
+//                if (ActivityUtils.harmonNotificationOn && !ActivityUtils.hasHarmonPass) {
+//
+//                }
+
     }
 
     @Override
@@ -281,6 +283,8 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         return null;
     }
 
+
+
     private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int nMinute) {
@@ -289,11 +293,12 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
 
             sharedPreferences.edit().putInt(ActivityUtils.HOUR_KEY, hour).apply();
             sharedPreferences.edit().putInt(ActivityUtils.MINUTE_KEY, minute).apply();
+            sharedPreferences.edit().putString(ActivityUtils.ALERT_NAME_KEY, "New Alert").apply();
 
             timePicker.setCurrentHour(sharedPreferences.getInt(ActivityUtils.HOUR_KEY, 0));
             timePicker.setCurrentMinute(sharedPreferences.getInt(ActivityUtils.MINUTE_KEY, 0));
 
-            ActivityUtils.alarmTimeSet = true;
+//            sharedPreferences.edit().putBoolean(ActivityUtils.ALERT_TIME_SET, true).apply();
             Log.i("Time Set", sharedPreferences.getInt(ActivityUtils.HOUR_KEY, 0) + ":" +
                     sharedPreferences.getInt(ActivityUtils.MINUTE_KEY, 0));
             Toast.makeText(ResultActivity.this, "Wake Up Call set for " +
@@ -366,7 +371,7 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         getLoaderManager().restartLoader(0, null, this);
 
         sharedPreferences.edit().putBoolean(ActivityUtils.ALERT_ON_KEY, alertOn).apply();
-        sharedPreferences.edit().putBoolean("alertPos", true).apply();
-        sharedPreferences.edit().putBoolean("alertHasBeenSet", true).apply();
+//        sharedPreferences.edit().putBoolean("alertPos", true).apply();
+        sharedPreferences.edit().putBoolean(ActivityUtils.ALERT_TIME_SET, true).apply();
     }
 }

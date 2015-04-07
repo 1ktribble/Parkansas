@@ -19,7 +19,7 @@
     <string name="free_parking">Free Parking</string>
     <string name="wake_up_call">Wake Up Call</string>
     <string name="bus_stop">Bus Stop</string>
-    <string name="time_expiration">Time Expiration for Short-Term meters, Union Garage, etc.</string>
+    <string name="time_expiration">Set Time Expiration</string>
     <string name="harmon_notification">Harmon Notification</string>
 
     <string name="student_text">Student</string>
@@ -36,6 +36,7 @@
     <string name="remote_pass_text">Remote (Orange)</string>
 
     <string name="alert_text">Alerts</string>
+    <string name="add_alert_text">Add Alert</string>
 
     <string name="suspend_text">Suspend</string>
     <string name="dismiss_text">Dismiss</string>
@@ -44,6 +45,19 @@
     <string name="wake_up_call_msg">You currently have Wake Up Call enabled. Would you like to use
     Wake Up Call to set an alarm before 7:00 AM (Ticket Time)?</string>
     <string name="wake_up_call_alert">We recommended you set a time prior to 7:00 AM.</string>
+
+    <string name="time_expiration_pre_msg">Set a time you would like to leave.</string>
+    <string name="time_expiration_msg">Your paid parking will expire in 10 minutes</string>
+    <string name="time_expiration_alert">What do you want to leave?</string>
+
+    <string name="game_day_msg_football">Your car will be towed at 11:59 PM</string>
+    <string name="game_day_alert_football">Your car will be towed at 11:59 PM</string>
+
+    <string name="game_day_msg_m_basketball">Your car will be towed at </string>
+    <string name="game_day_alert_m_basketball">Your car will be towed at </string>
+
+    <string name="game_day_msg_w_basketball">Your car will be towed at </string>
+    <string name="game_day_alert_w_basketball">Your car will be towed at </string>
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_alert_info">AlertInfoActivity</string>
