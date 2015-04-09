@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 public class ToolbarHomeFragment extends Fragment {
 
@@ -56,6 +58,12 @@ public class ToolbarHomeFragment extends Fragment {
 
         Button btn2 = (Button) getView().findViewById(R.id.centerBtn);
         btn2.setOnClickListener(onClickListener);
+
+        SearchView searchView = (SearchView) getView().findViewById(R.id.searchView);
+
+        int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        TextView textView = (TextView) searchView.findViewById(id);
+        textView.setTextColor(Color.WHITE);
     }
 }
 

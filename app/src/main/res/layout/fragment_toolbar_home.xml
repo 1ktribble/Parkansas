@@ -9,6 +9,14 @@
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/searchView"
+            android:gravity="center"
+            android:layout_weight="1" />
+
         <Button
             android:id="@+id/lotFiltersBtn"
             android:tag="lotFilters"
