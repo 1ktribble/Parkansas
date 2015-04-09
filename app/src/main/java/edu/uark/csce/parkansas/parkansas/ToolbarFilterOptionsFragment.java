@@ -13,10 +13,9 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 public class ToolbarFilterOptionsFragment extends Fragment {
-    String Yes = " ✔";
-    String No = " X";
 
     ArrayList<String> list;
+    ArrayList<Button> buttons = new ArrayList<>();
     boolean[] booleans;
 
     @Override
@@ -51,12 +50,35 @@ public class ToolbarFilterOptionsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Button btn1 = (Button) getView().findViewById(R.id.allBtn);
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tag = v.getTag().toString();
+                onToolbarFilterOptionsFragmentClickedListener.onToolbarFilterOptionsFragmentClicked(tag);
+                for(Button btnT : buttons){
+                    btnT.setTextColor(Color.WHITE);
+                }
+            }
+        });
+
+        Button btn2 = (Button) getView().findViewById(R.id.noneBtn);
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tag = v.getTag().toString();
+                onToolbarFilterOptionsFragmentClickedListener.onToolbarFilterOptionsFragmentClicked(tag);
+                for(Button btnT : buttons){
+                    btnT.setTextColor(Color.RED);
+                }
+            }
+        });
+
         LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.linearLayout);
 
         int size = list.size();
 
-
-        for(int j = 0; j < size; j+=2){
+        for(int j = 0; j < size; j+=3){
             LinearLayout linearLayout1 = new LinearLayout(getActivity());
             linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -64,16 +86,22 @@ public class ToolbarFilterOptionsFragment extends Fragment {
                     LinearLayout.LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.CENTER;
             params.weight = 3.0f;
-            linearLayout1.setLayoutParams(params);
+            linearLayout1.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            linearLayout1.setMinimumHeight(0);
 
-            for (int i = j; i < j + 2; i++) {
+            for (int i = j; i < j + 3; i++) {
                 if( i >= size) break;
                 final Button btn = new Button(getActivity());
                 btn.setLayoutParams(params);
-                if (booleans[i]) btn.setText(list.get(i) + Yes);
-                else btn.setText(list.get(i) + No);
+                btn.setTextAppearance(getActivity(), android.R.style.TextAppearance_DeviceDefault_Small);
+                if (booleans[i]) btn.setTextColor(Color.WHITE);
+                else btn.setTextColor(Color.RED);
+                btn.setText(list.get(i));
                 btn.setTag(list.get(i));
-                btn.setTextColor(Color.WHITE);
+                btn.setMinimumHeight(0);
+
                 btn.setBackgroundColor(Color.BLACK);
                 linearLayout1.addView(btn);
 
@@ -81,13 +109,15 @@ public class ToolbarFilterOptionsFragment extends Fragment {
                     public void onClick(View v) {
                         String tag = btn.getTag().toString();
                         onToolbarFilterOptionsFragmentClickedListener.onToolbarFilterOptionsFragmentClicked(tag);
-                        if (btn.getText().equals(tag + Yes)) {
-                            btn.setText(tag + No);
+
+                        if (btn.getCurrentTextColor() == Color.WHITE) {
+                            btn.setTextColor(Color.RED);
                         } else {
-                            btn.setText(tag + Yes);
+                            btn.setTextColor(Color.WHITE);
                         }
                     }
                 });
+                buttons.add(btn);
             }
             linearLayout.addView(linearLayout1);
         }

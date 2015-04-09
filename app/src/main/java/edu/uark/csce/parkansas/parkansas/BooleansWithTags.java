@@ -8,8 +8,8 @@ public class BooleansWithTags {
     ArrayList<Boolean> booleans;
 
     BooleansWithTags() {
-        tags = new ArrayList<String>();
-        booleans = new ArrayList<Boolean>();
+        tags = new ArrayList<>();
+        booleans = new ArrayList<>();
     }
 
     public void add(String tagArg, boolean boolArg){
@@ -28,6 +28,11 @@ public class BooleansWithTags {
     }
     public void flip(int i){
         booleans.set(i, !booleans.get(i));
+    }
+    public void setAll(boolean bool_){
+        for(int i = 0; i < booleans.size(); i++){
+            booleans.set(i, bool_);
+        }
     }
     public int size(){
         return tags.size();

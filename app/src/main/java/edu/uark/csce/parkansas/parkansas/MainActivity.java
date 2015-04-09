@@ -361,42 +361,71 @@ public class MainActivity extends FragmentActivity implements
     @Override
     public void onToolbarFilterOptionsFragmentClicked(String tag) {
         if(popDownFragment.equals("color")) {
-            int index = colorList.getIndexOf(tag);
-            Log.i("index", String.valueOf(index));
-            Log.i("tag", tag);
-            colorList.flip(index);
-            if(colorList.booleans.get(index)) {
-                for (int i = 0; i < lots.size(); i++) {
-                    if (lots.get(i).getColor().equals(tag)
-                            && timesList.isTrue(lots.get(i).getTime())
-                            && otherList.isTrue(lots.get(i).getOther())) {
+            if(tag.equals("all")){
+                colorList.setAll(true);
 
+                for(int i = 0; i < lots.size(); i++){
+                    if (timesList.isTrue(lots.get(i).getTime())) {
                         polygons.get(i).setVisible(true);
                     }
                 }
-            }else{
+            }else if(tag.equals("none")){
+                colorList.setAll(false);
+
                 for (int i = 0; i < lots.size(); i++) {
-                    if (lots.get(i).getColor().equals(tag)) {
-                        polygons.get(i).setVisible(false);
+                    polygons.get(i).setVisible(false);
+                }
+            }else {
+                int index = colorList.getIndexOf(tag);
+                colorList.flip(index);
+
+                if (colorList.booleans.get(index)) {
+                    for (int i = 0; i < lots.size(); i++) {
+                        if (lots.get(i).getColor().equals(tag)
+                                && timesList.isTrue(lots.get(i).getTime())) {
+
+                            polygons.get(i).setVisible(true);
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < lots.size(); i++) {
+                        if (lots.get(i).getColor().equals(tag)) {
+                            polygons.get(i).setVisible(false);
+                        }
                     }
                 }
             }
         }else if(popDownFragment.equals("times")) {
-            int index = timesList.getIndexOf(tag);
-            timesList.flip(index);
-            if(timesList.booleans.get(index)) {
-                for (int i = 0; i < lots.size(); i++) {
-                    if (lots.get(i).getTime().equals(tag)
-                            && otherList.isTrue(lots.get(i).getOther())
-                            && colorList.isTrue(lots.get(i).getColor())) {
+            if(tag.equals("all")){
+                timesList.setAll(true);
 
+                for(int i = 0; i < lots.size(); i++){
+                    if (colorList.isTrue(lots.get(i).getColor())) {
                         polygons.get(i).setVisible(true);
                     }
                 }
-            }else{
+            }else if(tag.equals("none")){
+                timesList.setAll(false);
+
                 for (int i = 0; i < lots.size(); i++) {
-                    if (lots.get(i).getTime().equals(tag)) {
-                        polygons.get(i).setVisible(false);
+                    polygons.get(i).setVisible(false);
+                }
+            }else {
+                int index = timesList.getIndexOf(tag);
+                timesList.flip(index);
+                if (timesList.booleans.get(index)) {
+                    for (int i = 0; i < lots.size(); i++) {
+                        if (lots.get(i).getTime().equals(tag)
+                                && colorList.isTrue(lots.get(i).getColor())) {
+
+                            polygons.get(i).setVisible(true);
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < lots.size(); i++) {
+                        if (lots.get(i).getTime().equals(tag)) {
+                            polygons.get(i).setVisible(false);
+                        }
                     }
                 }
             }

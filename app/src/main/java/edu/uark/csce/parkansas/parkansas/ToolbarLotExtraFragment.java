@@ -1,6 +1,7 @@
 package edu.uark.csce.parkansas.parkansas;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,12 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
 
 
 public class ToolbarLotExtraFragment extends Fragment {
 
     String color;
-    String other;
     String times;
 
     @Override
@@ -21,7 +25,6 @@ public class ToolbarLotExtraFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         color = getArguments().getString("color");
-        other = getArguments().getString("other");
         times = getArguments().getString("times");
 
         return inflater.inflate(R.layout.fragment_toolbar_lot_extra, container, false);
@@ -70,7 +73,45 @@ public class ToolbarLotExtraFragment extends Fragment {
         TextView textView2 = (TextView) getView().findViewById(R.id.lotTimesText);
         textView2.setText(times);
 
- //       TextView textView3 = (TextView) getView().findViewById(R.id.lotOtherText);
- //       textView3.setText(other);
+        View.OnClickListener onParkClickListener = new View.OnClickListener() {
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                // Get the layout inflater
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                final View diaView = inflater.inflate(R.layout.dialog_meter, null);
+
+                builder.setView(diaView);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                TimePicker pickerTime = (TimePicker) diaView.findViewById(R.id.timePicker);
+
+                pickerTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+                    @Override
+                    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                        TextView textView = (TextView) diaView.findViewById(R.id.costText);
+
+                        Calendar rightNow = Calendar.getInstance();
+
+                        double cost = 1.00;
+                        int hours = hourOfDay - rightNow.get(Calendar.HOUR_OF_DAY);
+                        int minutes = minute - rightNow.get(Calendar.MINUTE);
+                        double totalCost = hours * cost + (minutes * cost)/60;
+                        totalCost = new BigDecimal(totalCost).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        if(totalCost  < 0) totalCost = 0;
+                        textView.setText("$" + String.valueOf(totalCost));
+                    }
+                });
+                /*
+                pickerTime.setOnTimeChangedListener(new OnTimeChangedListener() {
+                    @Override
+                    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+
+                    }
+                });*/
+            }
+        };
+
+        Button parkHere = (Button) getView().findViewById(R.id.parkHereButton);
+        parkHere.setOnClickListener(onParkClickListener);
     }
 }

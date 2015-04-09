@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="true"
     tools:context="edu.uark.csce.parkansas.parkansas.ToolbarLotExtraFragment">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,6 +36,15 @@
             android:text="Directions"
             android:textColor="@color/white"
             android:gravity="center"
+            android:background="#000"
+            android:layout_weight="3"/>
+        <Button
+            android:id="@+id/parkHereButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Park Here"
+            android:gravity="center"
+            android:textColor="@color/white"
             android:background="#000"
             android:layout_weight="3"/>
     </LinearLayout>
