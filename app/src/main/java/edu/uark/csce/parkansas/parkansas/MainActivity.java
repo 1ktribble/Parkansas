@@ -609,6 +609,7 @@ public class MainActivity extends FragmentActivity implements
         getLocation();
     }
 
+
     private void getLocation() {
         lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         String provider = lm.getBestProvider(criteria, true);
