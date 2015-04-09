@@ -4,5 +4,17 @@
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
+    <style name="SmallButton">
+        android:id="@+id/noneBtn"
+        android:tag="none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="None"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/red"
+        android:gravity="center"
+        android:background="#000"
+        android:layout_weight="1"
+    </style>
 
 </resources>
