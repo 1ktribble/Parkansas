@@ -29,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -577,7 +578,8 @@ public class MainActivity extends FragmentActivity implements
                     for (int index = 0; index < poss.size(); index++) {
                         garages.add(map.addMarker(new MarkerOptions()
                                 .position(poss.get(index))
-                                .title(names.get(index))));
+                                .title(names.get(index))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.g))));
                     }
                 }
 
