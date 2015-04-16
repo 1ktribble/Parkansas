@@ -39,12 +39,14 @@
             android:gravity="center|right"
             android:layout_weight="1"/>
         <Button
+            android:id="@+id/costYes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="yes"
             android:layout_gravity="left"
             android:layout_weight="1"/>
         <Button
+            android:id="@+id/costNo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="no"
