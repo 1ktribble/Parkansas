@@ -480,6 +480,9 @@ public class MainActivity extends FragmentActivity implements
                             + latA + "," + lngA + "&daddr="
                             + centerPoint.latitude + "," + centerPoint.longitude));
             startActivity(mapIntent);
+        }else{
+            Log.i("Time", tag);
+            Log.i("Lot", String.valueOf(lots.get(selectedIndex).getName()));
         }
     }
 

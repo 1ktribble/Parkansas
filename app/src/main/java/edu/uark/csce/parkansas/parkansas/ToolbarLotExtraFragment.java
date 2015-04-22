@@ -75,15 +75,15 @@ public class ToolbarLotExtraFragment extends Fragment {
 
         View.OnClickListener onParkClickListener = new View.OnClickListener() {
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 // Get the layout inflater
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 final View diaView = inflater.inflate(R.layout.dialog_meter, null);
 
                 builder.setView(diaView);
-                AlertDialog dialog = builder.create();
+                final AlertDialog dialog = builder.create();
                 dialog.show();
-                TimePicker pickerTime = (TimePicker) diaView.findViewById(R.id.timePicker);
+                final TimePicker pickerTime = (TimePicker) diaView.findViewById(R.id.timePicker);
 
                 pickerTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                     @Override
@@ -101,13 +101,28 @@ public class ToolbarLotExtraFragment extends Fragment {
                         textView.setText("$" + String.valueOf(totalCost));
                     }
                 });
-                /*
-                pickerTime.setOnTimeChangedListener(new OnTimeChangedListener() {
-                    @Override
-                    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 
+                Button btn = (Button) diaView.findViewById(R.id.costYes);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String t1 = String.valueOf(pickerTime.getCurrentHour());
+                        String t2 = String.valueOf(pickerTime.getCurrentMinute());
+                        if(t2.length() == 1){
+                            t2 = '0' + t2;
+                        }
+
+                        onToolbarLotExtraFragmentClickedListener.onToolbarLotExtraFragmentClicked(t1+':'+t2);
+                        dialog.dismiss();
                     }
-                });*/
+                });
+                Button btn2 = (Button) diaView.findViewById(R.id.costNo);
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
             }
         };
 
