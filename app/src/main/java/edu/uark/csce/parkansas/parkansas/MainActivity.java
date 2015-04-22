@@ -600,9 +600,11 @@ public class MainActivity extends FragmentActivity implements
                         garages.add(map.addMarker(new MarkerOptions()
                                 .position(poss.get(index))
                                 .title(names.get(index))
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.g))));
+//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.g))))
+//                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g))));
                     }
-                }
+            }
 
         });
 
@@ -687,7 +689,7 @@ public class MainActivity extends FragmentActivity implements
                 }
                 streetAddress = (strReturnedAddress.toString());
             }
-            else{
+            else {
                 streetAddress = ("No Address returned!");
             }
         } catch (IOException e) {
@@ -739,6 +741,10 @@ public class MainActivity extends FragmentActivity implements
     protected void onStop(){
         super.onStop();
         ActivityUtils.mainActivityActive = false;
+//        map.addMarker(new MarkerOptions()
+//                .position(location)
+//                .title(streetAddress)
+//                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.current)));
     }
 
     private void setCriteria() {
