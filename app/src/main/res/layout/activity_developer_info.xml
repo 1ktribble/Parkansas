@@ -1,0 +1,91 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="edu.uark.csce.parkansas.parkansas.DeveloperInfoActivity">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/codyPic"
+        android:padding="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/cody_description"
+        android:id="@+id/codyDescription"
+        android:padding="15dp"
+        android:layout_below="@+id/codyPic"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tonyPic"
+        android:padding="15dp"
+        android:layout_below="@+id/codyDescription"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+ />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tony_description"
+        android:id="@+id/tonyDescription"
+        android:padding="15dp"
+        android:layout_below="@+id/tonyPic"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dakotaPic"
+        android:layout_below="@+id/tonyDescription"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:padding="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/dakota_description"
+        android:id="@+id/dakotaDescription"
+        android:padding="15dp"
+        android:layout_below="@+id/dakotaPic"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kaiPic"
+        android:layout_below="@+id/dakotaDescription"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:padding="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/kai_description"
+        android:id="@+id/kaiDescription"
+        android:padding="15dp"
+        android:layout_below="@+id/kaiPic"
+        android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+</ScrollView>

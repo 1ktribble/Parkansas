@@ -77,8 +77,9 @@ public class ParkansasNotificationService extends Service {
 //            Toast.makeText(this, "Notifications On", Toast.LENGTH_SHORT).show();
 
             if (onCampusCheck) {
-                if (/*between9and6 && */sharedPreferences.getBoolean(ActivityUtils.WAKEUP_ALERT, false)) {
-                    if (sharedPreferences.getBoolean(ActivityUtils.ALERT_TIME_SET, false)) {
+                if (sharedPreferences.getBoolean(ActivityUtils.WAKEUP_ALERT, false)) {
+                    if (sharedPreferences.getBoolean(ActivityUtils.ALERT_TIME_SET, false /*&&
+                    between9and6 && user indicated he/she is parked on a campus spot*/)) {
 //                        notificationManager.cancel(ActivityUtils.NOTIFICATION_ID);
                     } else {
 //                        showWakeUpNotification();
@@ -86,10 +87,13 @@ public class ParkansasNotificationService extends Service {
                 }
             }                // TODO: Handle this Notification
                 if (sharedPreferences.getBoolean(ActivityUtils.TIME_EXPIRATION_ALERT, false)) {
-                    // if the user indicated he parked in Garland Garage, Meadow Avenue, or any
-                    // of the Short-Term or Long-Term lots.
+                    // if the user indicated
+                    // 1) he/she parked in Garland Garage, Meadow Avenue, or any Short-Term or
+                    // Long-Term lots and
+                    // 2) he/she has indicated they want to see the notification.
                     boolean testBool = false;
-                    if(!testBool){
+                    boolean testBool_1 = false;
+                    if(!testBool == !testBool_1){
                         showTimeExpirationNotification();
                     }
 
@@ -97,7 +101,7 @@ public class ParkansasNotificationService extends Service {
                 // TODO: Handle this Notification
                 if (sharedPreferences.getBoolean(ActivityUtils.GAMEDAY_ALERT, false)) {
                     // TODO: Start New Service
-
+                    // 1) Check the schedule
                 }
 
                 // Dakota handles these

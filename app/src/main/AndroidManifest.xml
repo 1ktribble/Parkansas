@@ -19,6 +19,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -53,8 +54,8 @@
         </activity>
         <activity
             android:name=".DismissAlert"
-            android:taskAffinity=""
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true"
+            android:taskAffinity="" >
         </activity>
 
         <service
@@ -78,11 +79,16 @@
 
         <activity
             android:name=".ResultActivity"
-            android:label="@string/title_activity_result" >
+            android:label="@string/alert_text"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".AlertInfoActivity"
             android:label="@string/title_activity_alert_info" >
+        </activity>
+        <activity
+            android:name=".DeveloperInfoActivity"
+            android:label="@string/title_activity_developer_info" >
         </activity>
     </application>
 

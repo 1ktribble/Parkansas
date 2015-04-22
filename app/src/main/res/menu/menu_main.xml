@@ -7,16 +7,22 @@
         android:orderInCategory="1"
         android:showAsAction="never"
         />
+    <item android:id="@+id/action_about_developers"
+        android:title="@string/action_about_developers"
+        android:orderInCategory="2"
+        android:showAsAction="never"
+        />
     <item android:id="@+id/action_alerts"
         android:title="@string/alert_text"
         android:icon="@drawable/ic_action_suspend_alert_no_trim_midpadding"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:showAsAction="ifRoom|withText"
         />
     <item android:id="@+id/action_refresh"
         android:title="@string/refresh"
         android:icon="@drawable/ic_refresh_map_no_trim_midpadding"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         android:showAsAction="ifRoom|withText"
         />
+
 </menu>

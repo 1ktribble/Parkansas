@@ -60,7 +60,7 @@ public class ParkansasContentProvider extends ContentProvider {
 
         private static final String DATABASE_CREATE_CMD =
                 "create table " + DATABASE_TABLE + "(" + KEY_ID +
-                        " integer primary key autoincrement, " +
+                        " integer primary key, " +
                         KEY_ALARM_NAME + " text, " +
                         KEY_ALARM_TYPE + " text, " +
                         KEY_ALARM_TIME + " text not null, " +

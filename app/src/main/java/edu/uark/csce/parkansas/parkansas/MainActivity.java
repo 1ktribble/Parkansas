@@ -87,19 +87,9 @@ public class MainActivity extends FragmentActivity implements
         setContentView(R.layout.activity_main);
 //        intent = getIntent();
 
-        GetData test = new GetData(new GetData.OnTaskCompleted() {
-            @Override
-            public void onTaskCompleted(JSONObject products) {
-                taskCompleted(products);
-            }
-        });
 
-        boolean networkConnectionAvailable = haveNetworkConnection();
-        boolean connected = test.isConnected(this, networkConnectionAvailable);
 
-        if(!connected){
-            alertDialogShow(this);
-        }
+       checkConnection();
 
 //        /*
 //        Fragment fragment = new LegendFragment();
@@ -172,6 +162,12 @@ public class MainActivity extends FragmentActivity implements
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        ActivityUtils.mainActivityActive = true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.action_refresh:
@@ -183,6 +179,10 @@ public class MainActivity extends FragmentActivity implements
                 return true;
             case R.id.action_alerts:
                 startActivity(new Intent(this, ResultActivity.class));
+                finish();
+                return true;
+            case R.id.action_about_developers:
+                startActivity(new Intent(this, DeveloperInfoActivity.class));
                 return true;
         }
         return false;
@@ -195,6 +195,8 @@ public class MainActivity extends FragmentActivity implements
         // Retrieves SharedPreference value every time the app reloads.
         // NotificationHandler notificationHandler = new NotificationHandler(this);
   //      retrieveSharedPrefs();
+
+       checkConnection();
 
         if(lm != null)
             getLocation();
@@ -212,6 +214,22 @@ public class MainActivity extends FragmentActivity implements
 //                doBindService();
                 ActivityUtils.serviceOn = true;
             }
+        }
+    }
+
+    private void checkConnection(){
+        GetData test = new GetData(new GetData.OnTaskCompleted() {
+            @Override
+            public void onTaskCompleted(JSONObject products) {
+                taskCompleted(products);
+            }
+        });
+
+        boolean networkConnectionAvailable = haveNetworkConnection();
+        boolean connected = test.isConnected(this, networkConnectionAvailable);
+
+        if(!connected){
+            alertDialogShow(this);
         }
     }
 
@@ -712,6 +730,12 @@ public class MainActivity extends FragmentActivity implements
         super.onPause();
         if(locationListener != null && lm != null)
           lm.removeUpdates(locationListener);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        ActivityUtils.mainActivityActive = false;
     }
 
     private void setCriteria() {

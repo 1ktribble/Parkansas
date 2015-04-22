@@ -8,15 +8,14 @@ import android.os.Parcelable;
  */
 public class AlertData implements Parcelable{
     String alertName, alertTime, alertDay, alertType;
-    int alertTimeHour, alertTimeMinute;
+    int alertTimeHour, alertTimeMinute, alertId;
     boolean alertOn;
     long createdDate;
 
     public AlertData() { }
 
-    public String getAlertName() {
-        return alertName;
-    }
+    public int getAlertId() { return alertId; }
+    public String getAlertName() { return alertName; }
     public String getAlertTime() {
         return alertTime;
     }
@@ -29,6 +28,7 @@ public class AlertData implements Parcelable{
     public boolean getAlertPos() {return alertOn;}
     public long getDate() {return createdDate;}
 
+    public void setAlertId(int alertId) { this.alertId = alertId; }
     public void setAlertName(String alertName) {
         this.alertName = alertName;
     }
@@ -39,7 +39,7 @@ public class AlertData implements Parcelable{
         this.alertDay = alertDay;
     }
     public void setAlertType(String alertType) {
-        this.alertDay = alertType;
+        this.alertType = alertType;
     }
     public void setAlertTimeHour(int timeHour){ this.alertTimeHour = timeHour; }
     public void setAlertTimeMinute(int timeMinute){ this.alertTimeMinute = timeMinute; }
@@ -51,6 +51,8 @@ public class AlertData implements Parcelable{
     }
     private void readFromParcel(Parcel p) {
         // TODO Auto-generated method stub
+        alertId = p.readInt();
+
         alertName = p.readString();
         alertTime = p.readString();
         alertDay = p.readString();
@@ -61,18 +63,21 @@ public class AlertData implements Parcelable{
 
         alertOn = p.readByte() != 0;
     }
-    public AlertData(boolean alertOn, String time, String day) {
+    public AlertData(boolean alertOn, String alertName, int id, String time, String day) {
         super();
+        this.alertId = id;
         this.alertOn = alertOn;
+        this.alertName = alertName;
         this.alertTime = time;
         this.alertDay = day;
         this.createdDate = System.currentTimeMillis();
     }
 
-    public AlertData(boolean alertOn, String time, String day, String type, String alertName,
+    public AlertData(boolean alertOn, int id, String time, String day, String type, String alertName,
                      long c, int hour, int minute)
     {
         super();
+        this.alertId = id;
         this.createdDate = c;
         this.alertOn = alertOn;
         this.alertTime = time;
@@ -91,6 +96,8 @@ public class AlertData implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         // TODO Auto-generated method stub
+        dest.writeInt(alertId);
+
         dest.writeString(alertName);
         dest.writeString(alertTime);
         dest.writeString(alertDay);
@@ -105,6 +112,8 @@ public class AlertData implements Parcelable{
     public static final Parcelable.Creator<AlertData> CREATOR = new Creator<AlertData>() {
         public AlertData createFromParcel(Parcel in) {
             AlertData aData = new AlertData();
+
+            aData.alertId = in.readInt();
 
             aData.alertName = in.readString();
             aData.alertTime = in.readString();

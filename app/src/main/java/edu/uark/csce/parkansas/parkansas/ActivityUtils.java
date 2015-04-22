@@ -11,6 +11,7 @@ public class ActivityUtils {
 //    public static final String EXTRA_MESSAGE = "edu.uark.csce.parkansas.parkansas.EXTRA_MESSAGE";
 
     public static final String NOTIFICATION_ID_STRING = "NOTIFICATION_ID";
+    public static final String SHOW_WAKE_UP_ALERT_WARNING = "edu.uark.csce.parkansas.parkansas.WAKE_UP_ALERT_WARNING";
 
     public static final String ALERT_NAME_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_NAME_KEY";
     public static final String ALERT_TIME_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_TIME_KEY";
@@ -18,7 +19,9 @@ public class ActivityUtils {
     public static final String ALERT_ON_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_ON_KEY";
     public static final String HOUR_KEY = "edu.uark.csce.parkansas.parkansas.HOUR_KEY";
     public static final String MINUTE_KEY = "edu.uark.csce.parkansas.parkansas.MINUTE_KEY";
+    public static final String AM_PM_KEY = "edu.uark.csce.parkansas.parkansas.AM_PM_KEY";
     public static final String ALERT_TIME_SET = "edu.uark.csce.parkansas.parkansas.ALERT_TIME_SET";
+    public static final String ALERT_TYPE_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_NAME_TYPE";
 
     public static final String WAKEUP_ALERT = "edu.uark.csce.parkansas.parkansas.WAKEUP_ALERT";
     public static final String GAMEDAY_ALERT = "edu.uark.csce.parkansas.parkansas.GAMEDAY_ALERT";
@@ -39,7 +42,8 @@ public class ActivityUtils {
     public static final String CLOCK_VALUE = "edu.uark.csce.parkansas.parkansas.CLOCK_VALUE";
     public static final String TIMER_VALUE = "edu.uark.csce.parkanas.parkansas.TIMER_VALUE";
 
-    public static boolean onCampus = false, serviceOn = false, atLeastOneNotificationChecked = false;
+    public static boolean onCampus = false, serviceOn = false, mainActivityActive = false,
+            atLeastOneNotificationChecked = false;
 
     public static String classificationSelection = "";
 

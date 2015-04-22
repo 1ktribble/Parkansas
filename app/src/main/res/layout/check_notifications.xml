@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Notifications must be enabled for alerts to work."
+        android:id="@+id/textview2"
+        android:padding="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New ToggleButton"
+        android:id="@+id/toggleButton"
+        android:checked="false"
+        android:textOn="Notifications On"
+        android:textOff="Notifications Off"
+        android:padding="20dp"
+        android:layout_below="@+id/textview2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:id="@+id/closeButton"
+        android:layout_below="@+id/toggleButton"
+        android:layout_alignRight="@+id/toggleButton"
+        android:layout_alignEnd="@+id/toggleButton"
+        android:padding="20dp" />
+
+</RelativeLayout>

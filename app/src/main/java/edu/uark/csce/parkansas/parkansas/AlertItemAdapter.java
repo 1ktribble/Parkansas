@@ -29,6 +29,8 @@ public class AlertItemAdapter extends ArrayAdapter<AlertData>{
         AlertData item = getItem(position);
 
         String alertName = item.getAlertName();
+        if(alertName == null)
+            alertName = "New Alert " + position;
         String alertTime = item.getAlertTime();
         String alertDay = item.getAlertDay();
 
