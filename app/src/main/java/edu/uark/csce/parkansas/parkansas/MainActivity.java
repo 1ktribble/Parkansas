@@ -189,6 +189,9 @@ public class MainActivity extends FragmentActivity implements
             case R.id.action_about_developers:
                 startActivity(new Intent(this, DeveloperInfoActivity.class));
                 return true;
+            case R.id.action_help:
+                startActivity(new Intent(this, HelpActivity.class));
+                return true;
         }
         return false;
 
