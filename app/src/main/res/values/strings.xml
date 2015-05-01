@@ -74,7 +74,7 @@
     <!--Help-->
     <string name="contact_title">Contact Us</string>
     <string name="contact_description">If you would like to contact us regarding question,
-        comment or concern, click on this text to be redirected.</string>
+        comment or concern, click on text.</string>
     <string name="navigation_title">Navigation Guide</string>
     <string name="navigation_description"></string>
     <string name="alertsDescription">Alerts Activity: Allow the user to set different types of alerts.</string>
