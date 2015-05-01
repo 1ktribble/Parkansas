@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Parkansas</string>
+    <string name="app_name">PARKansas</string>
+    <string name="did_you_know">Did You Know?...</string>
     <string name="home_text">Exit</string>
 
     <string name="action_settings">Settings</string>
@@ -18,9 +19,11 @@
     <string name="pre_game_day">Pre-GameDay Car Moving</string>
     <string name="free_parking">Free Parking</string>
     <string name="wake_up_call">Wake Up Call</string>
-    <string name="bus_stop">Bus Stop</string>
     <string name="time_expiration">Set Time Expiration</string>
     <string name="harmon_notification">Harmon Notification</string>
+    <string name="bus_stop">Bus Stop</string>
+    <string name="other">Other</string>
+
 
     <string name="student_text">Student</string>
     <string name="faculty_text">Faculty</string>
@@ -73,5 +76,31 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_alert_info">AlertInfoActivity</string>
-    <string name="title_activity_developer_info">DeveloperInfoActivity</string>
+    <string name="title_activity_developer_info">Developers</string>
+
+    <string name="pre_game_day_desc_no_game">No upcoming sports events on campus</string>
+    <string name="free_parking_desc">Free Parking available prior to 7 AM every morning during the
+        week and all day during the weekend. Note: This does not apply to the Harmon Garage,
+        Resident Reserved, and wherever else noted otherwise.</string>
+    <string name="set_time_expir_desc">Only use these alerts if parked at the Union Garage, short-term,
+        or long-term parking meters</string>
+    <string name="harmon_time_set_desc">The cost for hourly parking is $1.00 for 39 minutes or $16.00 per day.
+        Vehicles leaving the facility within 20 minutes of entering will not have to pay for parking. A driver
+        who exits more than 20 minutes from the entry time will pay the full rate for parking. </string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <string name ="fact_inquiries">If you notice something wrong with PARKansas and would like to
+        report it, you can email the development team at team.m.parkansas@gmail.com</string>
+    <string name="fact_lot74">Lots 74, 74 A, 74 B, 74 C, and 74 E are located across the street
+        from the track parking lot. On average, there are 369 open spots available in all these lots
+        combined.</string>
+    <string name="fact_averageVacancies">At any given point in time, there are over 1,200 parking spots
+        available.</string>
+    <string name="fact_lateFreeLots">Lots 4, 5, 7, 8 and 61 require a permit between 7 AM and 8 PM
+        Monday through Thursday and 7 AM to 5 PM on Friday.</string>
+    <string name="fact_nextSemester">The Parking and Transit department is undergoing a major change
+        with all lots. These changes include the paving of lot 40 C and the changing of most times of
+        lots on campus.</string>
+    <string name="fact_HarmonGarage">Harmon is open to the public at all times and requires payment
+        between 7 AM and 1 AM Monday through Thursday; and Fridays from 7 AM to 6:15 PM.</string>
 </resources>

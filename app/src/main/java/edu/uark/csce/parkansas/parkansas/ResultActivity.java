@@ -1,9 +1,11 @@
 package edu.uark.csce.parkansas.parkansas;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.LoaderManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -33,18 +35,28 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class ResultActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    private static Intent intent;
+    private Intent intent, intent1;
     private AlertItemAdapter adapter;
     private ArrayList<AlertData> alertList;
     TimePicker timePicker;
     SharedPreferences sharedPreferences;
     AlertData aData;
+    DateTime now, dateTime;
+    LocalDateTime localDateTime;
+    Context context;
+//    AlarmService alarmService;
+    String alertNameString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +72,20 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         timePicker = new TimePicker(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+
         aData = new AlertData(false, 0, "", "", "", "", System.currentTimeMillis(), 0, 0);
+
+        boolean addOnStart = false;
+        if(intent != null)
+            addOnStart = intent.getBooleanExtra("SetNotification", false);
+
+        if(addOnStart){
+            if(sharedPreferences.getBoolean("prefNotificationSwitch", false))
+                addAlert();
+            else
+                promptNotificationSwitch();
+        }
+
 
         LoadListView();
     }
@@ -70,6 +95,14 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         super.onResume();
         getLoaderManager().restartLoader(0, null, this);
 
+        if(!(sharedPreferences == null))
+
+        intent = getIntent();
+
+        context = this;
+        dateTime = new DateTime();
+        now = DateTime.now();
+        localDateTime = now.withZone(DateTimeZone.getDefault()).toLocalDateTime();
         //alertConditionals(ActivityUtils.onCampus);
     }
 
@@ -128,6 +161,7 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
     }
 
     private void addAlert(){
+
         // open dialog asking what type of alert you want.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final CharSequence[] selections = getResources().
@@ -142,30 +176,76 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
                                 sharedPreferences.edit().putString(ActivityUtils.ALERT_TYPE_KEY,
                                     selections[which].toString()).apply();
                                 dialog.dismiss();
-                                if(!sharedPreferences.getString(ActivityUtils.ALERT_TYPE_KEY, "").
+                                if(sharedPreferences.getString(ActivityUtils.ALERT_TYPE_KEY, "").
                                         equals("Wake Up Call"))
-                                    openCustomizeAlert();
-                                else
                                     openPhoneAlarmSystem();
+                                else if(sharedPreferences.getString(ActivityUtils.ALERT_TYPE_KEY, "").
+                                        equals("Pre-GameDay Car Moving"))
+                                    checkSchedule();
+                                else if(sharedPreferences.getString(ActivityUtils.ALERT_TYPE_KEY, "").
+                                        equals("Free Parking"))
+                                    alertFreeParking();
+                                else
+                                    openCustomizeAlert();
+
                             }
                         });
-//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        finish();
-////                        startActivity(intent1);
-//                    }
-//                })
-//                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void alertFreeParking(){
+        int day = now.getDayOfWeek();
+        String alertMsg = "";
+        boolean weekday = day < 7 && day > 1;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.free_parking);
+
+        if (weekday) {
+                if (ActivityUtils.openedFromPARKHERE) {
+                    ActivityUtils.openedFromPARKHERE = false;
+                    String parkingTime = intent.getStringExtra(ActivityUtils.PARKING_LOT_TIME);
+                    String parkingName = intent.getStringExtra(ActivityUtils.PARKING_LOT_NAME);
+
+                    if(parkingTime.equals("7 AM - 5 PM") || parkingTime.equals("7 AM - 8 PM")) {
+                        String[] splitString = parkingTime.split("\\s+");
+//                          Toast.makeText(this, "" + splitString[3], Toast.LENGTH_SHORT).show();
+                        alertMsg = "Free parking will be available for Lot " + parkingName + " at " +
+                                splitString[3] + " PM. Set an alert?";
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                openCustomizeAlert();
+                            }
+                        });
+                    }
+//              Toast.makeText(this, "" + parkingTime, Toast.LENGTH_SHORT).show();
+                }else{
+                    alertMsg = "Please open from 'Park Here' button on home screen";
+                }
+        } else {
+                alertMsg = "Parking is free on Weekends unless otherwise posted (i.e. RESIDENT " +
+                        "RESERVED and Garland Garage).";
+        }
+        builder.setMessage(alertMsg);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void checkSchedule(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("We're Sorry")
+                .setMessage("The 'Pre-GameDay Car Moving' alert has not been implemented in this" +
+                        " version of PARKansas. Please check for later releases and use the 'Other' " +
+                        "alert type instead.")
+                .setCancelable(true);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void promptNotificationSwitch(){
@@ -243,7 +323,14 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         final TextView alertTypeTextView = (TextView) promptView.findViewById(R.id.alertType_text);
         final TextView alertTypeDescTextView = (TextView) promptView.findViewById(R.id.alertType_desc);
 
-//        String alertTypeString =
+        final String alertTypeString = sharedPreferences.getString(ActivityUtils.ALERT_TYPE_KEY,
+                getString(R.string.time_expiration));
+
+        alertTypeTextView.setText(alertTypeString);
+
+        String alertMessage = getAlertMsg(alertTypeString);
+
+        alertTypeDescTextView.setText(alertMessage);
 
         final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this).create();
         alertDialogBuilder.setView(promptView);
@@ -260,8 +347,10 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         saveAndContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alertNameString = editText.getText().toString();
+
                 sharedPreferences.edit().putString(ActivityUtils.ALERT_NAME_KEY,
-                        editText.getText().toString()).apply();
+                        alertNameString).apply();
 
                 sharedPreferences.edit().putString(ActivityUtils.ALERT_DAY_KEY,
                         spinner.getSelectedItem().toString()).apply();
@@ -275,6 +364,8 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
                 }
             }
         });
+
+//        alarmService = new AlarmService(this, alertTypeString, alertNameString);
 
         alertDialogBuilder.show();
 //        LayoutInflater layoutInflater = LayoutInflater.from(this);
@@ -310,6 +401,29 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
 //        });
     }
 
+    private String getAlertMsg(String alertType){
+        String alertMessage = "";
+
+        switch(alertType){
+            case "Pre-GameDay Car Moving":
+                alertMessage = getString(R.string.pre_game_day_desc_no_game);
+                break;
+            case "Free Parking":
+                alertMessage = getString(R.string.free_parking_desc);
+                break;
+            case "Set Time Expiration":
+                alertMessage = getString(R.string.set_time_expir_desc);
+                break;
+            case "Harmon Notification":
+                alertMessage = getString(R.string.harmon_time_set_desc);
+                break;
+            default:
+                break;
+        }
+
+        return alertMessage;
+    }
+
     private boolean isValidName(String alertName){
         if(alertName != null && alertName.length() > 0) {
             return true;
@@ -330,7 +444,8 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
 
     private void saveNewAlert(){
         //TODO: Add All this junk below
-        boolean alertOn = true;
+
+        int currentDay = now.getDayOfWeek();
 
         String day = sharedPreferences.getString(ActivityUtils.ALERT_DAY_KEY, "Alert Me Today");
         String name = sharedPreferences.getString(ActivityUtils.ALERT_NAME_KEY, "New Alert");
@@ -343,8 +458,6 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         StringBuilder sb = new StringBuilder();
 
         if(day.equals("Alert Me Today")){
-            Calendar calendar = Calendar.getInstance();
-            int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
             if(hour == 0)
                 hour = 12;
             else if(hour > 12)
@@ -385,13 +498,64 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
             }
             aData.setAlertDay(day);
             aData.setAlertTime(sb.toString());
-            aData.setAlertPos(alertOn);
+            aData.setAlertPos(true);
             aData.setAlertTimeHour(hour);
             aData.setAlertType(alertType);
             aData.setAlertTimeMinute(minute);
             aData.setAlertName(name);
             aData.setDate(System.currentTimeMillis());
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.set(localDateTime.getYear(), localDateTime.getMonthOfYear(), localDateTime.getDayOfWeek(),
+                    hour, minute, 0);
+
+            Intent myIntent = new Intent(ResultActivity.this, AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(ResultActivity.this, 0, myIntent,0);
+
+            AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+//            alarmService.startAlarm(day, hour, System.currentTimeMillis(), minute, amOrPm);
+
         }else{
+            switch(day){
+                case "Sunday":
+                    dateTime = dateTime.withDayOfWeek(1);
+                    if(now.getDayOfWeek() > DateTimeConstants.SUNDAY)
+                        dateTime = dateTime.plusWeeks(1);
+                    break;
+                case "Monday":
+                    dateTime = dateTime.withDayOfWeek(2);
+                    if(now.getDayOfWeek() > DateTimeConstants.MONDAY)
+                        dateTime = dateTime.plusWeeks(1);
+                    break;
+                case "Tuesday":
+                    dateTime = dateTime.withDayOfWeek(3);
+                    if(now.getDayOfWeek() > DateTimeConstants.TUESDAY)
+                        dateTime = dateTime.plusWeeks(1);
+                    break;
+                case "Wednesday":
+                    dateTime = dateTime.withDayOfWeek(4);
+                    if(now.getDayOfWeek() > DateTimeConstants.WEDNESDAY)
+                        dateTime = dateTime.plusWeeks(1);
+                    break;
+                case "Thursday":
+                    dateTime = dateTime.withDayOfWeek(5);
+                    if(now.getDayOfWeek() > DateTimeConstants.THURSDAY)
+                        dateTime = dateTime.plusWeeks(1);
+                    break;
+                case "Friday":
+                    dateTime = dateTime.withDayOfWeek(6);
+                    if(now.getDayOfWeek() > DateTimeConstants.FRIDAY)
+                        dateTime = dateTime.plusWeeks(1);
+                    break;
+                case "Saturday":
+                    dateTime = dateTime.withDayOfWeek(7);
+                    // This should never happen. But who knows, it's Java
+                    if(now.getDayOfWeek() > DateTimeConstants.SATURDAY)
+                        dateTime = dateTime.plusWeeks(1);
+                    break;
+            }
             aData.setAlertDay(day);
 
             sb.append((hour < 10) ? "0" + hour : hour)
@@ -401,16 +565,29 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
                     .append(amOrPm);
 
             aData.setAlertTime(sb.toString());
-            aData.setAlertPos(alertOn);
+            aData.setAlertPos(true);
             aData.setAlertTimeHour(hour);
             aData.setAlertTimeMinute(minute);
             aData.setAlertName(name);
             aData.setAlertType(alertType);
             aData.setDate(System.currentTimeMillis());
-        }
-//
 
-//
+            dateTime.withTime(hour, minute, 0, 0);
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.set(dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfWeek(),
+                dateTime.getHourOfDay(), dateTime.getMinuteOfDay(), dateTime.getSecondOfDay());
+
+            Intent myIntent = new Intent(ResultActivity.this, AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(ResultActivity.this, 0, myIntent,0);
+
+            AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+//            alarmService.startAlarm(day, hour, System.currentTimeMillis(), minute, amOrPm);
+
+        }
+
 //        alertList.add(aData);
         ContentResolver contentResolver = getContentResolver();
         ContentValues contentValues = new ContentValues();
@@ -427,9 +604,11 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
         contentResolver.insert(ParkansasContentProvider.CONTENT_URI, contentValues);
         getLoaderManager().restartLoader(0, null, this);
 //
-        sharedPreferences.edit().putBoolean(ActivityUtils.ALERT_ON_KEY, alertOn).apply();
+        sharedPreferences.edit().putBoolean(ActivityUtils.ALERT_ON_KEY, true).apply();
 //        sharedPreferences.edit().putBoolean("alertPos", true).apply();
         sharedPreferences.edit().putBoolean(ActivityUtils.ALERT_TIME_SET, true).apply();
+
+
     }
 
 //    @Override
@@ -590,34 +769,6 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
 
     }
 
-    private void alertConditionals(boolean onCampusCheck){
-
-            if (onCampusCheck) {
-                if (sharedPreferences.getBoolean(ActivityUtils.WAKEUP_ALERT, false)) {
-//                    showWakeUpNotification();
-
-                    if(!(sharedPreferences.getBoolean("alertHasBeenSet", false))) {
-   //                         showDialog(ActivityUtils.ALARM_ID);
-  //                          Log.i("Time Set", hour + ":" + minute);
-                        }
-                }
-            }
-               if (sharedPreferences.getBoolean(ActivityUtils.TIME_EXPIRATION_ALERT, false)) {
-//                         showDialog(ActivityUtils.ALARM_ID);
-
-                }
-//                if (ActivityUtils.gameDayNotificationOn) {
-//
-//                }
-//                if (ActivityUtils.freeParkingNotificationOn) {
-//
-//                }
-//                if (ActivityUtils.harmonNotificationOn && !ActivityUtils.hasHarmonPass) {
-//
-//                }
-
-    }
-
     private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int nMinute) {
@@ -661,10 +812,9 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
                     minute).apply();
             sharedPreferences.edit().putString(ActivityUtils.AM_PM_KEY, am_pm).apply();
 
- //           addAlarm(hour, minute, true, "");
         }
     };
-//
+
 //    public void addAlarm(int hour, int minute, boolean alertOn, String day){
 //        StringBuilder sb = new StringBuilder();
 //

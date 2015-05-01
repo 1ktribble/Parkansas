@@ -26,14 +26,23 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -46,29 +55,14 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name=".HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>
-        <activity
-            android:name=".DismissAlert"
-            android:excludeFromRecents="true"
-            android:taskAffinity="" >
-        </activity>
-
-        <service
-            android:name=".ParkansasNotificationService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-
-        <receiver
-            android:name=".CancelAlarmReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
 
         <provider
             android:name=".ParkansasContentProvider"
@@ -84,12 +78,23 @@
         </activity>
         <activity
             android:name=".AlertInfoActivity"
-            android:label="@string/title_activity_alert_info" >
+            android:label="@string/title_activity_alert_info"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".DeveloperInfoActivity"
-            android:label="@string/title_activity_developer_info" >
+            android:label="@string/title_activity_developer_info"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
+
+        <receiver
+            android:name=".AlertReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+
     </application>
 
 </manifest>

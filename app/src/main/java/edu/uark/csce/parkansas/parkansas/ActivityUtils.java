@@ -10,8 +10,9 @@ public class ActivityUtils {
 //    public static final String ON_CAMPUS_BOOL = "edu.uark.csce.parkansas.parkansas.ON_CAMPUS_BOOL";
 //    public static final String EXTRA_MESSAGE = "edu.uark.csce.parkansas.parkansas.EXTRA_MESSAGE";
 
-    public static final String NOTIFICATION_ID_STRING = "NOTIFICATION_ID";
+    public static final String NOTIFICATION_GROUP = "NOTIFICATION_GROUP";
     public static final String SHOW_WAKE_UP_ALERT_WARNING = "edu.uark.csce.parkansas.parkansas.WAKE_UP_ALERT_WARNING";
+
 
     public static final String ALERT_NAME_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_NAME_KEY";
     public static final String ALERT_TIME_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_TIME_KEY";
@@ -22,12 +23,17 @@ public class ActivityUtils {
     public static final String AM_PM_KEY = "edu.uark.csce.parkansas.parkansas.AM_PM_KEY";
     public static final String ALERT_TIME_SET = "edu.uark.csce.parkansas.parkansas.ALERT_TIME_SET";
     public static final String ALERT_TYPE_KEY = "edu.uark.csce.parkansas.parkansas.ALERT_NAME_TYPE";
+    public static final String ALERT_TYPE_KEY_2 = "edu.uark.csce.parkansas.parkansas.ALERT_NAME_TYPE_2";
+    public static final String ALERT_NAME_KEY_2 = "edu.uark.csce.parkansas.parkansas.ALERT_NAME_KEY_2";
 
+    public static final String PARKING_LOT_TIME = "edu.uark.csce.parkansas.parkansas.PARKING_LOT_TIME";
+    public static final String PARKING_LOT_NAME = "edu.uark.csce.parkansas.parkansas.PARKING_LOT_NAME";
     public static final String WAKEUP_ALERT = "edu.uark.csce.parkansas.parkansas.WAKEUP_ALERT";
     public static final String GAMEDAY_ALERT = "edu.uark.csce.parkansas.parkansas.GAMEDAY_ALERT";
     public static final String FREE_PARKING_ALERT = "edu.uark.csce.parkansas.parkansas.FREE_PARKING_ALERT";
     public static final String TIME_EXPIRATION_ALERT = "edu.uark.csce.parkansas.parkansas.TIME_EXPIRATION_ALERT";
     public static final String HARMON_ALERT = "edu.uark.csce.parkansas.parkansas.HARMON_ALERT";
+    public static final String ONE_TIME = "edu.uark.csce.parkansas.parkansas.ONE_TIME";
 
     public static final String HARMON_PASS = "edu.uark.csce.parkansas.parkansas.HARMON_PASS";
     public static final String RESIDENT_RESERVED = "edu.uark.csce.parkansas.parkansas.RESIDENT_RESERVED";
@@ -43,7 +49,7 @@ public class ActivityUtils {
     public static final String TIMER_VALUE = "edu.uark.csce.parkanas.parkansas.TIMER_VALUE";
 
     public static boolean onCampus = false, serviceOn = false, mainActivityActive = false,
-            atLeastOneNotificationChecked = false;
+            openedFromPARKHERE = false;
 
     public static String classificationSelection = "";
 

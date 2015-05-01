@@ -39,9 +39,9 @@ public class GetData{
             return false;
     }
 
-    public JSONObject getProducts(){
-        return products;
-    }
+//    public JSONObject getProducts(){
+//        return products;
+//    }
 
     class LoadAllProducts extends AsyncTask<String, String, String> {
 

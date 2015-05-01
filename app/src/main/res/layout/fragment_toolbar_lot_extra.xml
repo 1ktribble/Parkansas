@@ -28,21 +28,22 @@
             android:textColor="@color/white"
             android:background="#000"
             android:layout_weight="3"/>
-        <Button
+        <ImageButton
             android:id="@+id/directionsBtn"
             android:tag="directions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Directions"
             android:textColor="@color/white"
             android:gravity="center"
             android:background="#000"
-            android:layout_weight="3"/>
+            android:layout_weight="3"
+            android:src="@drawable/ic_navigation" />
         <Button
             android:id="@+id/parkHereButton"
+            android:tag="parkHere"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Park Here"
+            android:text="Park Here   "
             android:gravity="center"
             android:textColor="@color/white"
             android:background="#000"

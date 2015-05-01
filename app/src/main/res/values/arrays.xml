@@ -41,19 +41,21 @@
     </string-array>
 
     <string-array name="user_notification_type">
+        <item>@string/wake_up_call</item>
         <item>@string/pre_game_day</item>
         <item>@string/free_parking</item>
-        <item>@string/wake_up_call</item>
         <item>@string/time_expiration</item>
         <item>@string/harmon_notification</item>
+        <item>@string/other</item>
     </string-array>
 
     <string-array name="user_notification_type_values">
+        <item>@string/wake_up_call</item>
         <item>@string/pre_game_day</item>
         <item>@string/free_parking</item>
-        <item>@string/wake_up_call</item>
         <item>@string/time_expiration</item>
         <item>@string/harmon_notification</item>
+        <item>@string/other</item>
     </string-array>
 
 
@@ -115,4 +117,22 @@
         <item>Friday</item>
         <item>Saturday</item>
     </string-array>
+
+    <string-array name="rand_facts">
+        <item>@string/fact_inquiries</item>
+        <item>@string/fact_averageVacancies</item>
+        <item>@string/fact_HarmonGarage</item>
+        <item>@string/fact_lateFreeLots</item>
+        <item>@string/fact_lot74</item>
+        <item>@string/fact_nextSemester</item>
+    </string-array>
+
+    <string-array name="rand_facts_values">
+    <item>@string/fact_inquiries</item>
+    <item>@string/fact_averageVacancies</item>
+    <item>@string/fact_HarmonGarage</item>
+    <item>@string/fact_lateFreeLots</item>
+    <item>@string/fact_lot74</item>
+    <item>@string/fact_nextSemester</item>
+</string-array>
 </resources>

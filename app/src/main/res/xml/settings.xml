@@ -2,7 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory>
 
-
         <ListPreference
             android:key="prefUserType"
             android:title="Classification"
@@ -11,27 +10,11 @@
             android:entryValues="@array/user_type_values"
             />
 
-
-        <SwitchPreference
-            android:key="prefKeySwitch"
-            android:title="Key"
-            android:summaryOn="Hide Key"
-            android:summaryOff="Show Key"
-            />
-
         <SwitchPreference
             android:key="prefNotificationSwitch"
             android:title="Notifications"
             android:summaryOn="Notifications Enabled"
             android:summaryOff="Notifications Disabled"
-            />
-
-        <MultiSelectListPreference
-            android:key="prefNotificationType"
-            android:dependency="prefNotificationSwitch"
-            android:title="Select notifications"
-            android:entries = "@array/user_notification_type"
-            android:entryValues="@array/user_notification_type_values"
             />
 
         <MultiSelectListPreference

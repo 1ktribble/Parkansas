@@ -1,8 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="edu.uark.csce.parkansas.parkansas.AlertInfoActivity">
-    <item android:id="@+id/action_home" android:title="@string/home_text"
-        android:orderInCategory="1" android:showAsAction="never" />
-    <item android:id="@+id/action_alerts" android:title="@string/alert_text"
-        android:orderInCategory="2" android:showAsAction="never" />
-</menu>

@@ -2,6 +2,7 @@ package edu.uark.csce.parkansas.parkansas;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -29,6 +32,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -51,7 +55,8 @@ public class MainActivity extends FragmentActivity implements
         ToolbarFiltersFragment.OnToolbarFiltersFragmentClickedListener,
         ToolbarFilterOptionsFragment.OnToolbarFilterOptionsFragmentClickedListener,
         ToolbarLotFragment.OnToolbarLotFragmentClickedListener,
-        ToolbarLotExtraFragment.OnToolbarLotExtraFragmentClickedListener{
+        ToolbarLotExtraFragment.OnToolbarLotExtraFragmentClickedListener,
+        OnMapReadyCallback {
 
     //  Location Services
     LocationManager lm;
@@ -69,12 +74,12 @@ public class MainActivity extends FragmentActivity implements
     SharedPreferences sharedPreferences;
 //    ListPreference classificationList;
 //    NotificationManager notificationManager;
-    boolean mIsBound, timeSet, serviceOn, atLeastOneNotificationChecked;
+    boolean timeSet, serviceOn, atLeastOneNotificationChecked;
 
     String popDownFragment = "no";  //current fragment in the popDown frame, "no" == empty
     int selectedIndex;              //index of selected Lot
-    boolean moving = false;
-    float x,y = 0.0f;
+//    boolean moving = false;
+//    float x,y = 0.0f;
     ArrayList<LatLng> poss = new ArrayList<>();
     ArrayList<String> ids = new ArrayList<>();
     ArrayList<String> names = new ArrayList<>();
@@ -198,23 +203,30 @@ public class MainActivity extends FragmentActivity implements
 
        checkConnection();
 
-        if(lm != null)
-            getLocation();
+//        if(lm != null)
+//            getLocation();
 
-        Intent serviceIntent = new Intent(getApplicationContext(),
-                ParkansasNotificationService.class);
+//        Intent serviceIntent = new Intent(getApplicationContext(),
+//                ParkansasNotificationService.class);
 
         if(sharedPreferences != null){
-            if(sharedPreferences.getBoolean("prefNotificationSwitch", false)
-                    && ActivityUtils.atLeastOneNotificationChecked){
-                serviceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                serviceIntent.putExtra(ActivityUtils.ON_CAMPUS_BOOL, ActivityUtils.onCampus);
-                this.startService(serviceIntent);
+//            if(sharedPreferences.getBoolean("prefNotificationSwitch", false)
+//                    && ActivityUtils.atLeastOneNotificationChecked){
+//                serviceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////                serviceIntent.putExtra(ActivityUtils.ON_CAMPUS_BOOL, ActivityUtils.onCampus);
+//                this.startService(serviceIntent);
 //            if(!mIsBound)
 //                doBindService();
                 ActivityUtils.serviceOn = true;
-            }
+//            }
         }
+        resetDisconnectTimer();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        if(lm != null)
+            getLocation();
     }
 
     private void checkConnection(){
@@ -244,7 +256,7 @@ public class MainActivity extends FragmentActivity implements
         final AlertDialog.Builder adb = new AlertDialog.Builder(context);
 
         AlertDialog ad = adb.create();
-        ad.setMessage("Parkansas failed to launch. Check cellular or Wi-Fi connection.");
+        ad.setMessage("PARKansas maps failed to launch. Check cellular or Wi-Fi connection.");
         ad.show();
     }
 
@@ -327,6 +339,7 @@ public class MainActivity extends FragmentActivity implements
 
     private void addToolbarLotExtraFragment(Bundle bundle) {
         Fragment fragment = new ToolbarLotExtraFragment();
+        bundle.putString(ActivityUtils.PARKING_LOT_TIME, lots.get(selectedIndex).getTime());
         fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container2, fragment, "popDown");
@@ -480,11 +493,88 @@ public class MainActivity extends FragmentActivity implements
                             + latA + "," + lngA + "&daddr="
                             + centerPoint.latitude + "," + centerPoint.longitude));
             startActivity(mapIntent);
-        }else{
-            Log.i("Time", tag);
-            Log.i("Lot", String.valueOf(lots.get(selectedIndex).getName()));
+        }else if(tag.equals("parkHere")) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Park Here")
+                    .setMessage("Would you like to set a notification?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getApplicationContext(),
+                                    ResultActivity.class);
+                            intent.putExtra(ActivityUtils.PARKING_LOT_NAME, lots.get(selectedIndex)
+                                    .getName());
+                            intent.putExtra(ActivityUtils.PARKING_LOT_TIME, lots.get(selectedIndex)
+                                    .getTime());
+                            dialog.dismiss();
+                            startActivity(intent);
+                            ActivityUtils.openedFromPARKHERE = true;
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            // Get the layout inflater
+//                LayoutInflater inflater = getActivity().getLayoutInflater();
+//                final View diaView = inflater.inflate(R.layout.dialog_meter, null);
+//
+//                builder.setView(diaView);
+//                final AlertDialog dialog = builder.create();
+//                dialog.show();
+//                final TimePicker pickerTime = (TimePicker) diaView.findViewById(R.id.timePicker);
+//
+//                pickerTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+//                    @Override
+//                    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+//                        TextView textView = (TextView) diaView.findViewById(R.id.costText);
+//
+//                        Calendar rightNow = Calendar.getInstance();
+//
+//                        double cost = 1.00;
+//                        int hours = hourOfDay - rightNow.get(Calendar.HOUR_OF_DAY);
+//                        int minutes = minute - rightNow.get(Calendar.MINUTE);
+//                        double totalCost = hours * cost + (minutes * cost)/60;
+//                        totalCost = new BigDecimal(totalCost).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+//                        if(totalCost  < 0) totalCost = 0;
+//                        textView.setText("$" + String.valueOf(totalCost));
+//                    }
+//                });
+
+//                Button btn = (Button) diaView.findViewById(R.id.costYes);
+//                btn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        String t1 = String.valueOf(pickerTime.getCurrentHour());
+//                        String t2 = String.valueOf(pickerTime.getCurrentMinute());
+//                        if(t2.length() == 1){
+//                            t2 = '0' + t2;
+//                        }
+//
+//                        onToolbarLotExtraFragmentClickedListener.onToolbarLotExtraFragmentClicked(t1+':'+t2);
+//                        dialog.dismiss();
+//                    }
+//                });
+//                Button btn2 = (Button) diaView.findViewById(R.id.costNo);
+//                btn2.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
         }
+        else{
+              Log.i("Time", tag);
+              Log.i("Lot", String.valueOf(lots.get(selectedIndex).getName()));
+            }
+
     }
+
+
 
     private void taskCompleted(JSONObject products){
         colorList = new BooleansWithTags();
@@ -597,12 +687,13 @@ public class MainActivity extends FragmentActivity implements
                     polygons.add(map.addPolygon(rectOptions));
                 }
                     for (int index = 0; index < poss.size(); index++) {
-                        garages.add(map.addMarker(new MarkerOptions()
+                        Marker marker = map.addMarker(new MarkerOptions()
                                 .position(poss.get(index))
-                                .title(names.get(index))
 //                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.g))))
 //                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g))));
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g)));
+                        garages.add(marker);
+
                     }
             }
 
@@ -618,6 +709,7 @@ public class MainActivity extends FragmentActivity implements
                         removePopDownFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("name", lots.get(index).getName());
+                        bundle.putString("LotType", lots.get(index).getColor());
                         addToolbarLotFragment(bundle);
                         break;
                     }else if(index + 1 == lots.size()){
@@ -632,14 +724,13 @@ public class MainActivity extends FragmentActivity implements
         getLocation();
     }
 
-
     private void getLocation() {
         lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         String provider = lm.getBestProvider(criteria, true);
 
         Location l = lm.getLastKnownLocation(provider);
         updateWithNewLocation(l);
-        lm.requestLocationUpdates(provider, 2000, 10, locationListener);
+        lm.requestLocationUpdates(provider, 1000, 2, locationListener);
     }
 
     private final LocationListener locationListener = new LocationListener() {
@@ -660,7 +751,7 @@ public class MainActivity extends FragmentActivity implements
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            updateWithNewLocation(null);
         }
     };
 
@@ -735,12 +826,14 @@ public class MainActivity extends FragmentActivity implements
         super.onPause();
         if(locationListener != null && lm != null)
           lm.removeUpdates(locationListener);
+
     }
 
     @Override
     protected void onStop(){
         super.onStop();
         ActivityUtils.mainActivityActive = false;
+        stopDisconnectTimer();
 //        map.addMarker(new MarkerOptions()
 //                .position(location)
 //                .title(streetAddress)
@@ -772,5 +865,32 @@ public class MainActivity extends FragmentActivity implements
         return false;
     }
 
+    public static final long DISCONNECT_TIMEOUT = 300000; // 5 min = 5 * 60 * 1000 ms
+
+    private Handler disconnectHandler = new Handler(){
+        public void handleMessage(Message msg) {
+        }
+    };
+
+    private Runnable disconnectCallback = new Runnable() {
+        @Override
+        public void run() {
+            // Perform any required operation on disconnect
+        }
+    };
+
+    public void resetDisconnectTimer(){
+        disconnectHandler.removeCallbacks(disconnectCallback);
+        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
+    }
+
+    public void stopDisconnectTimer(){
+        disconnectHandler.removeCallbacks(disconnectCallback);
+    }
+
+    @Override
+    public void onUserInteraction(){
+        resetDisconnectTimer();
+    }
 }
 

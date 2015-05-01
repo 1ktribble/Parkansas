@@ -86,8 +86,8 @@ public class SettingsActivity extends PreferenceActivity
     }
 
     private void retrieveSharedPrefs(){
-        Intent serviceIntent = new Intent(getApplicationContext(),
-                ParkansasNotificationService.class);
+//        Intent serviceIntent = new Intent(getApplicationContext(),
+//                ParkansasNotificationService.class);
 
             Preference.OnPreferenceChangeListener listener = new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -98,44 +98,44 @@ public class SettingsActivity extends PreferenceActivity
             };
             classificationList.setOnPreferenceChangeListener(listener);
 
-            if (sharedPreferences.getBoolean("prefNotificationSwitch", true)) {
-                Set<String> selections = sharedPreferences.getStringSet("prefNotificationType", null);
-                //           String[] selected = selections.toArray(new String[] {});
-                if(selections != null)
-                    for (String s : selections) {
-                        if (s.equals(getString(R.string.time_expiration))) {
-                        //    ActivityUtils.timeExpirationNotificationOn = true;
-                        // use SharedPreferences instead of Globals
-                            sharedPreferences.edit().putBoolean(ActivityUtils.TIME_EXPIRATION_ALERT, true)
-                                    .apply();
-                            ActivityUtils.atLeastOneNotificationChecked = true;
-                        }
-                        if (s.equals(getString(R.string.free_parking))) {
-                        //    ActivityUtils.freeParkingNotificationOn = true;
-                            sharedPreferences.edit().putBoolean(ActivityUtils.FREE_PARKING_ALERT, true)
-                                    .apply();
-                            ActivityUtils.atLeastOneNotificationChecked = true;
-                        }
-                        if (s.equals(getString(R.string.wake_up_call))) {
-                        //    ActivityUtils.wakeUpCallOn = true;
-                            sharedPreferences.edit().putBoolean(ActivityUtils.WAKEUP_ALERT, true)
-                                    .apply();
-                            ActivityUtils.atLeastOneNotificationChecked = true;
-                        }
-                        if (s.equals(getString(R.string.pre_game_day))) {
-                        //    ActivityUtils.gameDayNotificationOn = true;
-                            sharedPreferences.edit().putBoolean(ActivityUtils.GAMEDAY_ALERT, true)
-                                    .apply();
-                            ActivityUtils.atLeastOneNotificationChecked = true;
-                        }
-                        if (s.equals(getString(R.string.harmon_notification))) {
-                        //    ActivityUtils.harmonNotificationOn = true;
-                            sharedPreferences.edit().putBoolean(ActivityUtils.HARMON_ALERT, true)
-                                    .apply();
-                            ActivityUtils.atLeastOneNotificationChecked = true;
-                        }
-                    }
-            }
+//            if (sharedPreferences.getBoolean("prefNotificationSwitch", true)) {
+//                Set<String> selections = sharedPreferences.getStringSet("prefNotificationType", null);
+//                //           String[] selected = selections.toArray(new String[] {});
+//                if(selections != null)
+//                    for (String s : selections) {
+//                        if (s.equals(getString(R.string.time_expiration))) {
+//                        //    ActivityUtils.timeExpirationNotificationOn = true;
+//                        // use SharedPreferences instead of Globals
+//                            sharedPreferences.edit().putBoolean(ActivityUtils.TIME_EXPIRATION_ALERT, true)
+//                                    .apply();
+//                            ActivityUtils.atLeastOneNotificationChecked = true;
+//                        }
+//                        if (s.equals(getString(R.string.free_parking))) {
+//                        //    ActivityUtils.freeParkingNotificationOn = true;
+//                            sharedPreferences.edit().putBoolean(ActivityUtils.FREE_PARKING_ALERT, true)
+//                                    .apply();
+//                            ActivityUtils.atLeastOneNotificationChecked = true;
+//                        }
+//                        if (s.equals(getString(R.string.wake_up_call))) {
+//                        //    ActivityUtils.wakeUpCallOn = true;
+//                            sharedPreferences.edit().putBoolean(ActivityUtils.WAKEUP_ALERT, true)
+//                                    .apply();
+//                            ActivityUtils.atLeastOneNotificationChecked = true;
+//                        }
+//                        if (s.equals(getString(R.string.pre_game_day))) {
+//                        //    ActivityUtils.gameDayNotificationOn = true;
+//                            sharedPreferences.edit().putBoolean(ActivityUtils.GAMEDAY_ALERT, true)
+//                                    .apply();
+//                            ActivityUtils.atLeastOneNotificationChecked = true;
+//                        }
+//                        if (s.equals(getString(R.string.harmon_notification))) {
+//                        //    ActivityUtils.harmonNotificationOn = true;
+//                            sharedPreferences.edit().putBoolean(ActivityUtils.HARMON_ALERT, true)
+//                                    .apply();
+//                            ActivityUtils.atLeastOneNotificationChecked = true;
+//                        }
+//                    }
+//            }
 
             Set<String> selections = sharedPreferences.getStringSet("prefUserPass", null);
             //           String[] selected = selections.toArray(new String[] {});
@@ -178,10 +178,6 @@ public class SettingsActivity extends PreferenceActivity
                                 .apply();
                     }
                 }
-        if(ActivityUtils.serviceOn && !sharedPreferences.getBoolean("prefNotificationSwitch", false)){
-            this.stopService(serviceIntent);
-            ActivityUtils.serviceOn = false;
-        }
 
         Toast.makeText(getApplicationContext(), "Settings Saved", Toast.LENGTH_LONG).show();
 
