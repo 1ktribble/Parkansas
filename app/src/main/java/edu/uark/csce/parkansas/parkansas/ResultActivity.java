@@ -3,9 +3,7 @@ package edu.uark.csce.parkansas.parkansas;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.LoaderManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -42,7 +40,6 @@ import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ResultActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -510,11 +507,11 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
             calendar.set(localDateTime.getYear(), localDateTime.getMonthOfYear(), localDateTime.getDayOfWeek(),
                     hour, minute, 0);
 
-            Intent myIntent = new Intent(ResultActivity.this, AlertReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(ResultActivity.this, 0, myIntent,0);
+//            Intent myIntent = new Intent(ResultActivity.this, AlertReceiver.class);
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(ResultActivity.this, 0, myIntent,0);
 
             AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+//            alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
 //            alarmService.startAlarm(day, hour, System.currentTimeMillis(), minute, amOrPm);
 
         }else{
@@ -579,11 +576,11 @@ public class ResultActivity extends Activity implements LoaderManager.LoaderCall
             calendar.set(dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfWeek(),
                 dateTime.getHourOfDay(), dateTime.getMinuteOfDay(), dateTime.getSecondOfDay());
 
-            Intent myIntent = new Intent(ResultActivity.this, AlertReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(ResultActivity.this, 0, myIntent,0);
+//            Intent myIntent = new Intent(ResultActivity.this, AlertReceiver.class);
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(ResultActivity.this, 0, myIntent,0);
 
             AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+//            alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
 //            alarmService.startAlarm(day, hour, System.currentTimeMillis(), minute, amOrPm);
 
         }
