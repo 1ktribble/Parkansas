@@ -693,6 +693,7 @@ public class MainActivity extends FragmentActivity implements
                 for (int index = 0; index < poss.size(); index++) {
                     for (int i = 0; i < ids.size(); i++) {
                         if (ids.get(i).equals("51")) {
+
                             Marker marker = map.addMarker(new MarkerOptions()
                                     .position(poss.get(index))
                                     .title("(HAPG) Harmon Avenue Garage")
