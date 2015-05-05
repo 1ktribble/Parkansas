@@ -689,49 +689,39 @@ public class MainActivity extends FragmentActivity implements
 
                     polygons.add(map.addPolygon(rectOptions));
                 }
-                //  Bug, All markers are showing Harmon
+                Marker harmonMarker, stadiumDrMarker, garlandMarker, meadowMarker;
                 for (int index = 0; index < poss.size(); index++) {
-                    for (int i = 0; i < ids.size(); i++) {
-                        if (ids.get(i).equals("51")) {
-
-                            Marker marker = map.addMarker(new MarkerOptions()
+                    if (ids.get(index).equals("51")) {
+                            harmonMarker = map.addMarker(new MarkerOptions()
                                     .position(poss.get(index))
                                     .title("(HAPG) Harmon Avenue Garage")
                                     .snippet("146 N. Harmon Ave. Fayetteville, Arkansas 72701")
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g)));
-                            garages.add(marker);
-                        } else if (ids.get(i).equals("51")) {
-                            Marker marker = map.addMarker(new MarkerOptions()
-                                    .position(poss.get(index))
-                                    .title("(HAPG) Harmon Avenue Garage")
-                                    .snippet("146 N. Harmon Ave. Fayetteville, Arkansas 72701")
-                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g)));
-                            garages.add(marker);
-                        } else if (ids.get(i).equals("52")) {
-                            Marker marker = map.addMarker(new MarkerOptions()
+                            garages.add(harmonMarker);
+                        } else if (ids.get(index).equals("52")) {
+                            stadiumDrMarker = map.addMarker(new MarkerOptions()
                                     .position(poss.get(index))
                                     .title("(SDPG) Stadium Drive Garage")
                                     .snippet("380 N. Stadium Dr. Fayetteville, Arkansas 72701")
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g)));
-                            garages.add(marker);
-                        } else if (ids.get(i).equals("87")) {
-                            Marker marker = map.addMarker(new MarkerOptions()
+                            garages.add(stadiumDrMarker);
+                        } else if (ids.get(index).equals("87")) {
+                            garlandMarker = map.addMarker(new MarkerOptions()
                                     .position(poss.get(index))
                                     .title("(GAPG) Garland Avenue Garage")
                                     .snippet("650 N. Garland Ave. Fayetteville, Arkansas 72701")
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g)));
-                            garages.add(marker);
-                        } else if (ids.get(i).equals("111")) {
-                            Marker marker = map.addMarker(new MarkerOptions()
+                            garages.add(garlandMarker);
+                        } else if (ids.get(index).equals("111")) {
+                            meadowMarker = map.addMarker(new MarkerOptions()
                                     .position(poss.get(index))
                                     .title("(MSPG) Meadow Stree Parking Garage")
                                     .snippet("1308 W. Meadow St. Fayetteville, Arkansas 72701")
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.g)));
-                            garages.add(marker);
+                            garages.add(meadowMarker);
                         }
                     }
                 }
-            }
         });
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
